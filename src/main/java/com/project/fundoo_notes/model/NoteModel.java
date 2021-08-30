@@ -10,8 +10,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Table(name = "Notes")
 public class NoteModel {
     @Id
     @Column(name = "id", nullable = false)
@@ -41,5 +41,4 @@ public class NoteModel {
     private String color;
     @Column(name="reminder")
     private LocalDateTime remindertime;
-
 }
