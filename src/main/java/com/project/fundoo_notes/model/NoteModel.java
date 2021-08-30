@@ -1,11 +1,6 @@
 package com.project.fundoo_notes.model;
 
 import lombok.Data;
-import lombok.Generated;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
