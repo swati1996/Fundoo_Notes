@@ -1,5 +1,6 @@
 package com.project.fundoo_notes.service;
 
+import com.project.fundoo_notes.builder.TokenUtil;
 import com.project.fundoo_notes.dto.NoteDTO;
 import com.project.fundoo_notes.dto.ResponseDTO;
 import com.project.fundoo_notes.model.NoteModel;
@@ -16,10 +17,14 @@ public class NoteService implements INoteService {
     @Autowired
     private NoteRepository repository;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
     @Override
     public ResponseDTO create(NoteDTO noteDTO) {
         NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
         repository.save(note);
-        return new ResponseDTO("Created",200);
+        String token = tokenUtil.createToken(note.getId());
+        return new ResponseDTO("Created",200,token);
     }
 }

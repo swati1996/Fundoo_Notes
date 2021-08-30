@@ -12,4 +12,5 @@ import lombok.*;
 public class ResponseDTO {
     private String message;
     private int statuscode;
+    private String token;
 }
