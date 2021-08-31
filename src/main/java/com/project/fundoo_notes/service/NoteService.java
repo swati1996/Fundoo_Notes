@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,21 +100,28 @@ public class NoteService implements INoteService {
     @Override
     public List getAllNoteByTrash() {
         List getAllTrashNote =repository.findAll().stream().filter(trash->trash.isTrash()==true).collect(Collectors.toList());
-        System.out.println(getAllTrashNote);
         return getAllTrashNote;
     }
 
     @Override
     public List getAllNoteByPin() {
         List getAllPinedNote =repository.findAll().stream().filter(pin->pin.isPin()==true).collect(Collectors.toList());
-        System.out.println(getAllPinedNote);
         return getAllPinedNote;
     }
 
     @Override
     public List getAllNoteByArchive() {
         List getAllArchiveNote =repository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
-        System.out.println(getAllArchiveNote);
         return getAllArchiveNote;
+    }
+
+    @Override
+    public List getAllNoteByTrashAndArchive() {
+        Predicate<NoteModel> isTrash = t -> t.isTrash() == true;
+        Predicate<NoteModel> isArchive = a -> a.isArchieve() == true;
+        List getAllTrashArchiveNote =repository.findAll().stream().
+                filter(isTrash.and(isArchive)).collect(Collectors.toList());
+        System.out.println(getAllTrashArchiveNote);
+        return getAllTrashArchiveNote;
     }
 }
