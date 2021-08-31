@@ -25,4 +25,11 @@ public class NoteController {
         ResponseDTO res = service.getNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    @PutMapping(value="/update/{token}")
+    public ResponseEntity<ResponseDTO> updateNote(@RequestHeader String token,
+                                                  @RequestBody NoteDTO noteDTO){
+        ResponseDTO res = service.updateNote(token,noteDTO);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+
 }

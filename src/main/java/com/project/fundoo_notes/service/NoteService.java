@@ -40,4 +40,17 @@ public class NoteService implements INoteService {
         }else
             return new ResponseDTO("Note is not present",404,token);
     }
+
+    @Override
+    public ResponseDTO updateNote(String token, NoteDTO noteDTO) {
+        long id = tokenUtil.decodeToken(token);
+        System.out.println(id);
+        Optional<NoteModel> note = repository.findById(id);
+        if(note.isPresent()){
+            NoteModel updateNote = modelMapper.map(noteDTO,NoteModel.class);
+            repository.save(updateNote);
+            return new ResponseDTO("Note updated Successfully",200, token);
+        }else
+            return new ResponseDTO("Note is not present",404,token);
+    }
 }

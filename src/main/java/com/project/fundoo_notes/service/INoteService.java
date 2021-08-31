@@ -7,4 +7,6 @@ public interface INoteService {
     ResponseDTO create(NoteDTO noteDTO);
 
     ResponseDTO getNote(String token);
+
+    ResponseDTO updateNote(String token, NoteDTO noteDTO);
 }
