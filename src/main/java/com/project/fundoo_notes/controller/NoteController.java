@@ -20,4 +20,9 @@ public class NoteController {
         ResponseDTO res = service.create(noteDTO);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
+    @GetMapping(value="/get/{token}")
+    public ResponseEntity<ResponseDTO> getNote(@RequestHeader String token){
+        ResponseDTO res = service.getNote(token);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 }

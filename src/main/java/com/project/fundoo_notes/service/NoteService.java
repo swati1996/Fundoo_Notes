@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class NoteService implements INoteService {
     @Autowired
@@ -26,5 +28,16 @@ public class NoteService implements INoteService {
         repository.save(note);
         String token = tokenUtil.createToken(note.getId());
         return new ResponseDTO("Created",200,token);
+    }
+
+    @Override
+    public ResponseDTO getNote(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<NoteModel> note = repository.findById(id);
+        if(note.isPresent()){
+            return new ResponseDTO("Note is present",200,token);
+
+        }else
+            return new ResponseDTO("Note is not present",404,token);
     }
 }

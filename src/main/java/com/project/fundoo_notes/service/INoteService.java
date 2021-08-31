@@ -5,4 +5,6 @@ import com.project.fundoo_notes.dto.ResponseDTO;
 
 public interface INoteService {
     ResponseDTO create(NoteDTO noteDTO);
+
+    ResponseDTO getNote(String token);
 }
