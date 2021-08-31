@@ -22,7 +22,7 @@ public interface INoteService {
 
     List getAllNoteByPin();
 
-    List getAllNoteByArchive();
+    List getAllNoteByArchieve();
 
-    List getAllNoteByTrashAndArchive();
+    List getAllNoteByTrashAndArchieve();
 }

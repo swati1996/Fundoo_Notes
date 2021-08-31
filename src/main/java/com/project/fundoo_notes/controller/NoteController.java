@@ -62,12 +62,12 @@ public class NoteController {
     }
     @GetMapping(value = "/getByArchive/")
     public ResponseEntity<List> getAllNoteByArchive(){
-        List res = service.getAllNoteByArchive();
+        List res = service.getAllNoteByArchieve();
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByTrashAndArchive/")
     public ResponseEntity<List> getAllNoteByTrashAndArchive(){
-        List res = service.getAllNoteByTrashAndArchive();
+        List res = service.getAllNoteByTrashAndArchieve();
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 }

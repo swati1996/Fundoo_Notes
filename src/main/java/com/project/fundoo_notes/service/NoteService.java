@@ -110,13 +110,13 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public List getAllNoteByArchive() {
-        List getAllArchiveNote =repository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
-        return getAllArchiveNote;
+    public List getAllNoteByArchieve() {
+        List getAllArchieveNote =repository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
+        return getAllArchieveNote;
     }
 
     @Override
-    public List getAllNoteByTrashAndArchive() {
+    public List getAllNoteByTrashAndArchieve() {
         Predicate<NoteModel> isTrash = t -> t.isTrash() == true;
         Predicate<NoteModel> isArchive = a -> a.isArchieve() == true;
         List getAllTrashArchiveNote =repository.findAll().stream().
