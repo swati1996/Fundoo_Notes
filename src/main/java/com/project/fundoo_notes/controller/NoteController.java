@@ -31,5 +31,10 @@ public class NoteController {
         ResponseDTO res = service.updateNote(token,noteDTO);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    @DeleteMapping(value="/delete/{token}")
+    public ResponseEntity<ResponseDTO> deleteNote(@RequestHeader String token){
+        ResponseDTO res = service.deleteNote(token);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 
 }
