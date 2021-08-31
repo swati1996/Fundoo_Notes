@@ -2,6 +2,7 @@ package com.project.fundoo_notes.model;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Getter
+@Setter
 @Table(name = "Notes")
 public class NoteModel {
     @Id
@@ -27,7 +29,7 @@ public class NoteModel {
     @Column(name = "UpdatedDate")
     private LocalDateTime updateDate;
     @Column(name="trash")
-    private boolean trash;
+    private boolean trash = false;
     @Column(name="archieve")
     private boolean isArchieve;
     @Column(name="pin")

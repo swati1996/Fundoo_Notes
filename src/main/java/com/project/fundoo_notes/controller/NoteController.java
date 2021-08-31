@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class NoteController {
 
@@ -37,4 +39,30 @@ public class NoteController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
+    @GetMapping(value="/isarchive/{token}")
+    public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token){
+        ResponseDTO res = service.archieveNote(token);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+
+    @GetMapping(value="/ispin/{token}")
+    public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token){
+        ResponseDTO res = service.pinNote(token);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+    @GetMapping(value = "/getByTrash/")
+    public ResponseEntity<List> getAllNoteByTrash(){
+        List res = service.getAllNoteByTrash();
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+    @GetMapping(value = "/getByPined/")
+    public ResponseEntity<List> getAllNoteByPin(){
+        List res = service.getAllNoteByPin();
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+    @GetMapping(value = "/getByArchive/")
+    public ResponseEntity<List> getAllNoteByArchive(){
+        List res = service.getAllNoteByArchive();
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 }

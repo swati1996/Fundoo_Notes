@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService implements INoteService {
@@ -48,7 +50,7 @@ public class NoteService implements INoteService {
         Optional<NoteModel> note = repository.findById(id);
         if(note.isPresent()){
             NoteModel updateNote = modelMapper.map(noteDTO,NoteModel.class);
-            repository.save(note.get());
+            repository.save(updateNote);
             return new ResponseDTO("Note updated Successfully",200, token);
         }else
             return new ResponseDTO("Note is not present",404,token);
@@ -60,9 +62,58 @@ public class NoteService implements INoteService {
         Optional<NoteModel> note = repository.findById(id);
         if(note.isPresent()){
             note.get().setTrash(true);
+            repository.save(note.get());
             return new ResponseDTO("move to trash",200,token);
-//            repository.delete(note.get());
         }
         return new ResponseDTO("Note not found",404,token);
+    }
+
+    @Override
+    public ResponseDTO archieveNote(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<NoteModel> note = repository.findById(id);
+        if(note.isPresent()){
+            if(note.get().isArchieve()){
+                return new ResponseDTO("Note in archive",200,token);
+            }else{
+                return new ResponseDTO("Note not in archive",200,token);
+            }
+        }
+        return new ResponseDTO("Note not found",400,token);
+    }
+
+    @Override
+    public ResponseDTO pinNote(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<NoteModel> note = repository.findById(id);
+        if(note.isPresent()){
+            if(note.get().isPin()){
+                return new ResponseDTO("Note in pin",200,token);
+            }else{
+                return new ResponseDTO("Note not pin",200,token);
+            }
+        }
+        return new ResponseDTO("Note not found",400,token);
+    }
+
+    @Override
+    public List getAllNoteByTrash() {
+        List getAllTrashNote =repository.findAll().stream().filter(trash->trash.isTrash()==true).collect(Collectors.toList());
+        System.out.println(getAllTrashNote);
+        return getAllTrashNote;
+    }
+
+    @Override
+    public List getAllNoteByPin() {
+        List getAllPinedNote =repository.findAll().stream().filter(pin->pin.isPin()==true).collect(Collectors.toList());
+        System.out.println(getAllPinedNote);
+        return getAllPinedNote;
+    }
+
+    @Override
+    public List getAllNoteByArchive() {
+        List getAllArchiveNote =repository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
+        System.out.println(getAllArchiveNote);
+        return getAllArchiveNote;
     }
 }
