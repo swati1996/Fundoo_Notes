@@ -26,4 +26,10 @@ public class LabelController {
         LabelResponseDTO res = service.update(id,labelDTO);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
+    @DeleteMapping(value = "deletelabel/{id}")
+    public ResponseEntity<ResponseDTO> deleteLabel(@RequestParam long id){
+        LabelResponseDTO res = service.delete(id);
+        return new ResponseEntity(res, HttpStatus.OK);
+    }
+    
 }

@@ -37,5 +37,15 @@ public class LabelService implements ILabelService {
             return new LabelResponseDTO("Label not found",400);
     }
 
+    @Override
+    public LabelResponseDTO delete(long id) {
+        Optional<LabelModel> labelModel = labelRepository.findById(id);
+        if(labelModel.isPresent()){
+            labelRepository.delete(labelModel.get());
+            return new LabelResponseDTO("Label deleted",200);
+        }
+        return new LabelResponseDTO("Label not found",400);
+    }
+
 
 }
