@@ -47,7 +47,6 @@ public class NoteService implements INoteService {
     @Override
     public ResponseDTO updateNote(String token, NoteDTO noteDTO) {
         long id = tokenUtil.decodeToken(token);
-        System.out.println(id);
         Optional<NoteModel> note = repository.findById(id);
         if(note.isPresent()){
             NoteModel updateNote = modelMapper.map(noteDTO,NoteModel.class);
