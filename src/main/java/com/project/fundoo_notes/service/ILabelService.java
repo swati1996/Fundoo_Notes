@@ -10,4 +10,6 @@ public interface ILabelService {
     LabelResponseDTO update(long id, LabelDTO labelDTO);
 
     LabelResponseDTO delete(long id);
+
+    LabelResponseDTO getLabel(long id);
 }

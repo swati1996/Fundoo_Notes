@@ -16,20 +16,24 @@ public class LabelController {
     private ILabelService service;
 
     @PostMapping(value = "createlabel")
-    public ResponseEntity<ResponseDTO> createLabel(@RequestBody LabelDTO labelDTO){
+    public ResponseEntity<LabelResponseDTO> createLabel(@RequestBody LabelDTO labelDTO){
         LabelResponseDTO res = service.create(labelDTO);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
     @PutMapping(value = "updatelabel/{id}")
-    public ResponseEntity<ResponseDTO> updateLabel(@RequestParam long id,
+    public ResponseEntity<LabelResponseDTO> updateLabel(@RequestParam long id,
                                                    @RequestBody LabelDTO labelDTO){
         LabelResponseDTO res = service.update(id,labelDTO);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
     @DeleteMapping(value = "deletelabel/{id}")
-    public ResponseEntity<ResponseDTO> deleteLabel(@RequestParam long id){
+    public ResponseEntity<LabelResponseDTO> deleteLabel(@RequestParam long id){
         LabelResponseDTO res = service.delete(id);
         return new ResponseEntity(res, HttpStatus.OK);
     }
-    
+    @GetMapping(value = "getLabel/{id}")
+    public ResponseEntity<LabelResponseDTO> getLabel(@RequestParam long id){
+        LabelResponseDTO res = service.getLabel(id);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 }
