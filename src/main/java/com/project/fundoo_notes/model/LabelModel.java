@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Data
 @Entity
 @Table(name = "Label")
 public class LabelModel {
@@ -22,4 +24,6 @@ public class LabelModel {
     private LocalDateTime registrationDate;
     @Column(name = "updatedDate")
     private LocalDateTime updatedDate;
+    @ManyToMany(mappedBy = "labelList")
+    private List<NoteModel> notes;
 }

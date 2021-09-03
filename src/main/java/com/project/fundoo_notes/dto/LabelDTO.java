@@ -2,6 +2,7 @@ package com.project.fundoo_notes.dto;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Data
@@ -11,6 +12,5 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class LabelDTO {
     private String labelname;
-    private long noteId;
 //    private LocalDateTime updatedDate;
 }
