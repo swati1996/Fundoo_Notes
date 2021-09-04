@@ -21,9 +21,9 @@ public interface INoteService {
 
     NoteResponseDTO getAllNoteFromTrash(String token);
 
-    List getAllNoteByPin();
+    NoteResponseDTO getAllPinNote(String token);
 
-    List getAllNoteByArchieve();
+    NoteResponseDTO getAllNoteByArchieve(String token);
 
     List getAllNoteByTrashAndArchieve();
 }

@@ -127,15 +127,29 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public List getAllNoteByPin() {
-        List getAllPinedNote = noteRepository.findAll().stream().filter(pin->pin.isPin()==true).collect(Collectors.toList());
-        return getAllPinedNote;
+    public NoteResponseDTO getAllPinNote(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<List>  notes = noteRepository.findByUserId(id);
+        List getAllPinedNote = null;
+        if (notes.isPresent()){
+            getAllPinedNote = noteRepository.findAll().stream().
+                    filter(pin->pin.isPin()==true).collect(Collectors.toList());
+            return new  NoteResponseDTO(getAllPinedNote,200);
+        }
+        return new NoteResponseDTO(getAllPinedNote,400);
     }
 
     @Override
-    public List getAllNoteByArchieve() {
-        List getAllArchieveNote = noteRepository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
-        return getAllArchieveNote;
+    public NoteResponseDTO getAllNoteByArchieve(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<List>  notes = noteRepository.findByUserId(id);
+        List getAllArchieveNote = null;
+        if (notes.isPresent()) {
+            getAllArchieveNote = noteRepository.findAll().stream().
+                    filter(arc -> arc.isArchieve() == true).collect(Collectors.toList());
+            return new NoteResponseDTO(getAllArchieveNote,200);
+        }
+        return new NoteResponseDTO(getAllArchieveNote,400);
     }
 
     @Override

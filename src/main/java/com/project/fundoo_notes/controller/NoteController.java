@@ -22,9 +22,9 @@ public class NoteController {
     private INoteService service;
 
     @PostMapping(value = "createnote")
-    public ResponseEntity<ResponseDTO> createNote( @RequestBody @Valid NoteDTO noteDTO
-            ,@RequestHeader String token,
-            BindingResult e){
+    public ResponseEntity<ResponseDTO> createNote( @RequestBody @Valid NoteDTO noteDTO,
+                                                   @RequestHeader String token,
+                                                   BindingResult e){
         if(e.hasErrors()){
             List<String> error = e.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -68,19 +68,19 @@ public class NoteController {
         ResponseDTO res = service.pinNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @GetMapping(value = "/getByTrash/")
+    @GetMapping(value = "/getNoteFromTrash/")
     public ResponseEntity<NoteResponseDTO> getAllNoteByTrash(@RequestHeader String token){
         NoteResponseDTO res = service.getAllNoteFromTrash(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @GetMapping(value = "/getByPined/")
-    public ResponseEntity<List> getAllNoteByPin(){
-        List res = service.getAllNoteByPin();
+    @GetMapping(value = "/getPinedNoted/")
+    public ResponseEntity<NoteResponseDTO> getAllNoteByPin(@RequestHeader String token){
+        NoteResponseDTO res = service.getAllPinNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByArchive/")
-    public ResponseEntity<List> getAllNoteByArchive(){
-        List res = service.getAllNoteByArchieve();
+    public ResponseEntity<NoteResponseDTO> getAllNoteFromArchive(@RequestHeader String token){
+        NoteResponseDTO res = service.getAllNoteByArchieve(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByTrashAndArchive/")
