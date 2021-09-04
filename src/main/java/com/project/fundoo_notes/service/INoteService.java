@@ -11,7 +11,7 @@ public interface INoteService {
 
     NoteResponseDTO getNote(String token);
 
-    ResponseDTO updateNote(String token, NoteDTO noteDTO);
+    ResponseDTO updateNote(String token, NoteDTO noteDTO, long noteId);
 
     ResponseDTO deleteNote(String token);
 

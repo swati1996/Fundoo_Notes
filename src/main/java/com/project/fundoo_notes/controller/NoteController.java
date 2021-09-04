@@ -42,10 +42,11 @@ public class NoteController {
         NoteResponseDTO res = service.getNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @PutMapping(value="/update")
+    @PutMapping(value="/update/{noteId}")
     public ResponseEntity<ResponseDTO> updateNote(@RequestHeader String token,
-                                                  @RequestBody NoteDTO noteDTO){
-        ResponseDTO res = service.updateNote(token,noteDTO);
+                                                  @RequestBody NoteDTO noteDTO,
+                                                  @RequestParam long noteId){
+        ResponseDTO res = service.updateNote(token,noteDTO,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @DeleteMapping(value="/delete")

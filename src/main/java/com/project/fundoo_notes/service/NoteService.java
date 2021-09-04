@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -51,15 +52,30 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDTO updateNote(String token, NoteDTO noteDTO) {
+    public ResponseDTO updateNote(String token, NoteDTO noteDTO, long noteId) {
         long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(id);
-        if(note.isPresent()){
-            NoteModel updateNote = modelMapper.map(noteDTO,NoteModel.class);
-            noteRepository.save(updateNote);
-            return new ResponseDTO("Note updated Successfully",200);
-        }else
+        Optional<List> notesList = noteRepository.findByUserId(id);
+        if(notesList.isPresent()){
+            Optional<NoteModel> notes = noteRepository.findById(noteId);
+            if(notes.isPresent()) {
+                NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
+                note.setUpdateDate(LocalDateTime.now());
+                note.setId(noteId);
+//                notes.get().setUpdateDate(LocalDateTime.now());
+//                notes.get().setId(noteId);
+//                notes.get().setColor(noteDTO.getColor());
+//                notes.get().setDescription(noteDTO.getDescription());
+//                notes.get().setPin(noteDTO.isInPin());
+//                notes.get().setArchieve(noteDTO.isInarchieved());
+//                notes.get().setTitle(noteDTO.getTitle());
+                noteRepository.save(note);
+                return new ResponseDTO("Note updated Successfully", 200);
+            }
             return new ResponseDTO("Note is not present",404);
+        }else
+            return new ResponseDTO("User not present", 400);
+
+
     }
 
     @Override
