@@ -61,21 +61,12 @@ public class NoteService implements INoteService {
                 NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
                 note.setUpdateDate(LocalDateTime.now());
                 note.setId(noteId);
-//                notes.get().setUpdateDate(LocalDateTime.now());
-//                notes.get().setId(noteId);
-//                notes.get().setColor(noteDTO.getColor());
-//                notes.get().setDescription(noteDTO.getDescription());
-//                notes.get().setPin(noteDTO.isInPin());
-//                notes.get().setArchieve(noteDTO.isInarchieved());
-//                notes.get().setTitle(noteDTO.getTitle());
                 noteRepository.save(note);
                 return new ResponseDTO("Note updated Successfully", 200);
             }
             return new ResponseDTO("Note is not present",404);
         }else
             return new ResponseDTO("User not present", 400);
-
-
     }
 
     @Override
