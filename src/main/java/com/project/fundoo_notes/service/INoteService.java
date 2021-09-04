@@ -15,11 +15,11 @@ public interface INoteService {
 
     ResponseDTO deleteNote(String token, long noteId);
 
-    ResponseDTO archieveNote(String token);
+    ResponseDTO archieveNote(String token, long noteId);
 
-    ResponseDTO pinNote(String token);
+    ResponseDTO pinNote(String token, long noteId);
 
-    List getAllNoteByTrash();
+    NoteResponseDTO getAllNoteByTrash(String token);
 
     List getAllNoteByPin();
 

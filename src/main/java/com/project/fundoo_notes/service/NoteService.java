@@ -58,6 +58,7 @@ public class NoteService implements INoteService {
                 NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
                 note.setUpdateDate(LocalDateTime.now());
                 note.setId(noteId);
+                note.setUserId(id);
                 noteRepository.save(note);
                 return new ResponseDTO("Note updated Successfully", 200);
             }
@@ -82,10 +83,11 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDTO archieveNote(String token) {
+    public ResponseDTO archieveNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(id);
-        if(note.isPresent()){
+        Optional<List> notes = noteRepository.findByUserId(id);
+        if(notes.isPresent()){
+            Optional<NoteModel> note = noteRepository.findById(noteId);
             if(note.get().isArchieve()){
                 return new ResponseDTO("Note in archive",200);
             }else{
@@ -96,10 +98,11 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDTO pinNote(String token) {
+    public ResponseDTO pinNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(id);
-        if(note.isPresent()){
+        Optional<List>  notes = noteRepository.findByUserId(id);
+        if(notes.isPresent()){
+            Optional<NoteModel> note = noteRepository.findById(noteId);
             if(note.get().isPin()){
                 return new ResponseDTO("Note in pin",200);
             }else{
@@ -110,9 +113,17 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public List getAllNoteByTrash() {
-        List getAllTrashNote = noteRepository.findAll().stream().filter(trash->trash.isTrash()==true).collect(Collectors.toList());
-        return getAllTrashNote;
+    public NoteResponseDTO getAllNoteByTrash(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<List>  notes = noteRepository.findByUserId(id);
+        List getAllTrashNote=null;
+        if (notes.isPresent()){
+            getAllTrashNote = noteRepository.findAll().stream().
+                    filter(trash->trash.isTrash()==true).collect(Collectors.toList());
+            return new NoteResponseDTO(getAllTrashNote,200);
+        }
+       return new NoteResponseDTO(getAllTrashNote,400);
+
     }
 
     @Override

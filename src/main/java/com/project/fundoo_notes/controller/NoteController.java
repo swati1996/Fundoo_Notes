@@ -56,20 +56,22 @@ public class NoteController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/isarchive")
-    public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token){
-        ResponseDTO res = service.archieveNote(token);
+    @GetMapping(value="/isarchive/{noteId}")
+    public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token,
+                                                   @PathVariable long noteId){
+        ResponseDTO res = service.archieveNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/ispin")
-    public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token){
-        ResponseDTO res = service.pinNote(token);
+    @GetMapping(value="/ispin/{noteId}")
+    public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token,
+                                               @PathVariable long noteId){
+        ResponseDTO res = service.pinNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByTrash/")
-    public ResponseEntity<List> getAllNoteByTrash(){
-        List res = service.getAllNoteByTrash();
+    public ResponseEntity<NoteResponseDTO> getAllNoteByTrash(@RequestHeader String token){
+        NoteResponseDTO res = service.getAllNoteByTrash(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByPined/")

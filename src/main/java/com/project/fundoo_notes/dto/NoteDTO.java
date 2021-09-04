@@ -26,8 +26,8 @@ public class NoteDTO {
 //    private String emailid;
     @JsonIgnore
     private long userId;
-    private boolean inPin;
-    private boolean inarchieved;
+    private boolean inPin=false;
+    private boolean inarchieved=false;
     @JsonIgnore
     private LocalDateTime updateDate=LocalDateTime.now();
     @JsonIgnore
