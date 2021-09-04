@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,5 +14,6 @@ import java.util.Optional;
 public interface NoteRepository extends JpaRepository<NoteModel,Long> {
     Optional<NoteModel> findById(long id);
     Optional<NoteModel> findByIdAndUserId(Long labelId, Long userId);
+    Optional<List> findByUserId(Long userId);
 
 }

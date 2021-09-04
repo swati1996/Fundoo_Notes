@@ -1,6 +1,7 @@
 package com.project.fundoo_notes.controller;
 
 import com.project.fundoo_notes.dto.NoteDTO;
+import com.project.fundoo_notes.dto.NoteResponseDTO;
 import com.project.fundoo_notes.dto.ResponseDTO;
 import com.project.fundoo_notes.service.INoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class NoteController {
     }
 
     @GetMapping(value="/get")
-    public ResponseEntity<ResponseDTO> getNote(@RequestHeader String token){
-        ResponseDTO res = service.getNote(token);
+    public ResponseEntity<NoteResponseDTO> getNote(@RequestHeader String token){
+        NoteResponseDTO res = service.getNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @PutMapping(value="/update")

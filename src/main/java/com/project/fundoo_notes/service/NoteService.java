@@ -2,6 +2,7 @@ package com.project.fundoo_notes.service;
 
 import com.project.fundoo_notes.builder.TokenUtil;
 import com.project.fundoo_notes.dto.NoteDTO;
+import com.project.fundoo_notes.dto.NoteResponseDTO;
 import com.project.fundoo_notes.dto.ResponseDTO;
 import com.project.fundoo_notes.model.NoteModel;
 import com.project.fundoo_notes.repository.NoteRepository;
@@ -9,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -35,14 +38,16 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDTO getNote(String token) {
+    public NoteResponseDTO getNote(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(id);
-        if(note.isPresent()){
-            return new ResponseDTO("Note is present",200);
+        List notesList  = Collections.singletonList(noteRepository.findByUserId(id));
+        if(notesList.isEmpty()){
+            return new NoteResponseDTO(notesList,404);
 
-        }else
-            return new ResponseDTO("Note is not present",404);
+        }else {
+            return new NoteResponseDTO(notesList, 200);
+
+        }
     }
 
     @Override

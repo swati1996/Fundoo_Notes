@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 @Setter
@@ -27,4 +28,8 @@ public class NoteDTO {
     private long userId;
     private boolean inPin;
     private boolean inarchieved;
+    @JsonIgnore
+    private LocalDateTime updateDate=LocalDateTime.now();
+    @JsonIgnore
+    private LocalDateTime registerDate=LocalDateTime.now();
 }
