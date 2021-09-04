@@ -19,7 +19,7 @@ public interface INoteService {
 
     ResponseDTO pinNote(String token, long noteId);
 
-    NoteResponseDTO getAllNoteByTrash(String token);
+    NoteResponseDTO getAllNoteFromTrash(String token);
 
     List getAllNoteByPin();
 

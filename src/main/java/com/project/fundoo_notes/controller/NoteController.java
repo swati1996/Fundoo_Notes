@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +70,7 @@ public class NoteController {
     }
     @GetMapping(value = "/getByTrash/")
     public ResponseEntity<NoteResponseDTO> getAllNoteByTrash(@RequestHeader String token){
-        NoteResponseDTO res = service.getAllNoteByTrash(token);
+        NoteResponseDTO res = service.getAllNoteFromTrash(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByPined/")

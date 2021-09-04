@@ -113,7 +113,7 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public NoteResponseDTO getAllNoteByTrash(String token) {
+    public NoteResponseDTO getAllNoteFromTrash(String token) {
         Long id = tokenUtil.decodeToken(token);
         Optional<List>  notes = noteRepository.findByUserId(id);
         List getAllTrashNote=null;
