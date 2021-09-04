@@ -22,42 +22,44 @@ public class NoteController {
     private INoteService service;
 
     @PostMapping(value = "createnote")
-    public ResponseEntity<ResponseDTO> createNote( @RequestBody @Valid NoteDTO noteDTO ,BindingResult e){
+    public ResponseEntity<ResponseDTO> createNote( @RequestBody @Valid NoteDTO noteDTO
+            ,@RequestHeader String token,
+            BindingResult e){
         if(e.hasErrors()){
             List<String> error = e.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
         }else {
-            ResponseDTO res = service.create(noteDTO);
+            ResponseDTO res = service.create(noteDTO,token);
             return new ResponseEntity(res, HttpStatus.CREATED);
         }
     }
 
-    @GetMapping(value="/get/{token}")
+    @GetMapping(value="/get")
     public ResponseEntity<ResponseDTO> getNote(@RequestHeader String token){
         ResponseDTO res = service.getNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @PutMapping(value="/update/{token}")
+    @PutMapping(value="/update")
     public ResponseEntity<ResponseDTO> updateNote(@RequestHeader String token,
                                                   @RequestBody NoteDTO noteDTO){
         ResponseDTO res = service.updateNote(token,noteDTO);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @DeleteMapping(value="/delete/{token}")
+    @DeleteMapping(value="/delete")
     public ResponseEntity<ResponseDTO> deleteNote(@RequestHeader String token){
         ResponseDTO res = service.deleteNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/isarchive/{token}")
+    @GetMapping(value="/isarchive")
     public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token){
         ResponseDTO res = service.archieveNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/ispin/{token}")
+    @GetMapping(value="/ispin")
     public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token){
         ResponseDTO res = service.pinNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);

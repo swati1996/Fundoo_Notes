@@ -6,7 +6,7 @@ import com.project.fundoo_notes.dto.ResponseDTO;
 import java.util.List;
 
 public interface INoteService {
-    ResponseDTO create(NoteDTO noteDTO);
+    ResponseDTO create(NoteDTO noteDTO, String token);
 
     ResponseDTO getNote(String token);
 

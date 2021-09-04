@@ -20,97 +20,98 @@ public class NoteService implements INoteService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private NoteRepository repository;
+    private NoteRepository noteRepository;
 
     @Autowired
     private TokenUtil tokenUtil;
 
     @Override
-    public ResponseDTO create(NoteDTO noteDTO) {
+    public ResponseDTO create(NoteDTO noteDTO, String token) {
+        Long id = tokenUtil.decodeToken(token);
+        noteDTO.setUserId(id);
         NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
-        repository.save(note);
-        String token = tokenUtil.createToken(note.getId());
-        return new ResponseDTO("Created",200,token);
+        noteRepository.save(note);
+        return new ResponseDTO("Note created successfully",200);
     }
 
     @Override
     public ResponseDTO getNote(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = repository.findById(id);
+        Optional<NoteModel> note = noteRepository.findById(id);
         if(note.isPresent()){
-            return new ResponseDTO("Note is present",200,token);
+            return new ResponseDTO("Note is present",200);
 
         }else
-            return new ResponseDTO("Note is not present",404,token);
+            return new ResponseDTO("Note is not present",404);
     }
 
     @Override
     public ResponseDTO updateNote(String token, NoteDTO noteDTO) {
         long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = repository.findById(id);
+        Optional<NoteModel> note = noteRepository.findById(id);
         if(note.isPresent()){
             NoteModel updateNote = modelMapper.map(noteDTO,NoteModel.class);
-            repository.save(updateNote);
-            return new ResponseDTO("Note updated Successfully",200, token);
+            noteRepository.save(updateNote);
+            return new ResponseDTO("Note updated Successfully",200);
         }else
-            return new ResponseDTO("Note is not present",404,token);
+            return new ResponseDTO("Note is not present",404);
     }
 
     @Override
     public ResponseDTO deleteNote(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = repository.findById(id);
+        Optional<NoteModel> note = noteRepository.findById(id);
         if(note.isPresent()){
             note.get().setTrash(true);
-            repository.save(note.get());
-            return new ResponseDTO("move to trash",200,token);
+            noteRepository.save(note.get());
+            return new ResponseDTO("move to trash",200);
         }
-        return new ResponseDTO("Note not found",404,token);
+        return new ResponseDTO("Note not found",404);
     }
 
     @Override
     public ResponseDTO archieveNote(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = repository.findById(id);
+        Optional<NoteModel> note = noteRepository.findById(id);
         if(note.isPresent()){
             if(note.get().isArchieve()){
-                return new ResponseDTO("Note in archive",200,token);
+                return new ResponseDTO("Note in archive",200);
             }else{
-                return new ResponseDTO("Note not in archive",200,token);
+                return new ResponseDTO("Note not in archive",200);
             }
         }
-        return new ResponseDTO("Note not found",400,token);
+        return new ResponseDTO("Note not found",400);
     }
 
     @Override
     public ResponseDTO pinNote(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = repository.findById(id);
+        Optional<NoteModel> note = noteRepository.findById(id);
         if(note.isPresent()){
             if(note.get().isPin()){
-                return new ResponseDTO("Note in pin",200,token);
+                return new ResponseDTO("Note in pin",200);
             }else{
-                return new ResponseDTO("Note not pin",200,token);
+                return new ResponseDTO("Note not pin",200);
             }
         }
-        return new ResponseDTO("Note not found",400,token);
+        return new ResponseDTO("Note not found",400);
     }
 
     @Override
     public List getAllNoteByTrash() {
-        List getAllTrashNote =repository.findAll().stream().filter(trash->trash.isTrash()==true).collect(Collectors.toList());
+        List getAllTrashNote = noteRepository.findAll().stream().filter(trash->trash.isTrash()==true).collect(Collectors.toList());
         return getAllTrashNote;
     }
 
     @Override
     public List getAllNoteByPin() {
-        List getAllPinedNote =repository.findAll().stream().filter(pin->pin.isPin()==true).collect(Collectors.toList());
+        List getAllPinedNote = noteRepository.findAll().stream().filter(pin->pin.isPin()==true).collect(Collectors.toList());
         return getAllPinedNote;
     }
 
     @Override
     public List getAllNoteByArchieve() {
-        List getAllArchieveNote =repository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
+        List getAllArchieveNote = noteRepository.findAll().stream().filter(arc->arc.isArchieve()==true).collect(Collectors.toList());
         return getAllArchieveNote;
     }
 
@@ -118,7 +119,7 @@ public class NoteService implements INoteService {
     public List getAllNoteByTrashAndArchieve() {
         Predicate<NoteModel> isTrash = t -> t.isTrash() == true;
         Predicate<NoteModel> isArchive = a -> a.isArchieve() == true;
-        List getAllTrashArchiveNote =repository.findAll().stream().
+        List getAllTrashArchiveNote = noteRepository.findAll().stream().
                 filter(isTrash.and(isArchive)).collect(Collectors.toList());
         System.out.println(getAllTrashArchiveNote);
         return getAllTrashArchiveNote;

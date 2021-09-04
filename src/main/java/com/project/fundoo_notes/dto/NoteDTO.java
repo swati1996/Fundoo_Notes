@@ -1,5 +1,6 @@
 package com.project.fundoo_notes.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -18,9 +19,12 @@ public class NoteDTO {
     @NotBlank(message = "Please enter description")
     private String description;
     private String color;
-    @NotBlank(message = "Please enter valid email")
-    @Email
-    private String emailid;
+//    @JsonIgnore
+//    @NotBlank(message = "Please enter valid email")
+//    @Email
+//    private String emailid;
+    @JsonIgnore
+    private long userId;
     private boolean inPin;
     private boolean inarchieved;
 }

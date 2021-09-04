@@ -33,9 +33,9 @@ public class NoteModel {
     @Column(name="trash")
     private boolean trash = false;
     @Column(name="archieve")
-    private boolean isArchieve;
+    private boolean isArchieve=false;
     @Column(name="pin")
-    private boolean pin;
+    private boolean pin=false;
     @Column(name="labelid")
     private Long labelId;
     @Column(name="emailid")
