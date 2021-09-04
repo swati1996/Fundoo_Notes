@@ -42,9 +42,8 @@ public class NoteService implements INoteService {
         List notesList  = Collections.singletonList(noteRepository.findByUserId(id));
         if(notesList.isEmpty()){
             return new NoteResponseDTO(notesList,404);
-        }else {
+        }else
             return new NoteResponseDTO(notesList, 200);
-        }
     }
 
     @Override
@@ -89,9 +88,8 @@ public class NoteService implements INoteService {
             Optional<NoteModel> note = noteRepository.findById(noteId);
             if(note.get().isArchieve()){
                 return new ResponseDTO("Note in archive",200);
-            }else{
+            }else
                 return new ResponseDTO("Note not in archive",200);
-            }
         }
         return new ResponseDTO("Note not found",400);
     }
@@ -104,9 +102,8 @@ public class NoteService implements INoteService {
             Optional<NoteModel> note = noteRepository.findById(noteId);
             if(note.get().isPin()){
                 return new ResponseDTO("Note in pin",200);
-            }else{
+            }else
                 return new ResponseDTO("Note not pin",200);
-            }
         }
         return new ResponseDTO("Note not found",400);
     }
