@@ -45,13 +45,14 @@ public class NoteController {
     @PutMapping(value="/update/{noteId}")
     public ResponseEntity<ResponseDTO> updateNote(@RequestHeader String token,
                                                   @RequestBody NoteDTO noteDTO,
-                                                  @RequestParam long noteId){
+                                                  @PathVariable long noteId){
         ResponseDTO res = service.updateNote(token,noteDTO,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
-    @DeleteMapping(value="/delete")
-    public ResponseEntity<ResponseDTO> deleteNote(@RequestHeader String token){
-        ResponseDTO res = service.deleteNote(token);
+    @DeleteMapping(value="/delete/{noteId}")
+    public ResponseEntity<ResponseDTO> deleteNote(@RequestHeader String token,
+                                                  @PathVariable long noteId){
+        ResponseDTO res = service.deleteNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 

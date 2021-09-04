@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -44,10 +43,8 @@ public class NoteService implements INoteService {
         List notesList  = Collections.singletonList(noteRepository.findByUserId(id));
         if(notesList.isEmpty()){
             return new NoteResponseDTO(notesList,404);
-
         }else {
             return new NoteResponseDTO(notesList, 200);
-
         }
     }
 
@@ -70,13 +67,16 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public ResponseDTO deleteNote(String token) {
+    public ResponseDTO deleteNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(id);
-        if(note.isPresent()){
-            note.get().setTrash(true);
-            noteRepository.save(note.get());
-            return new ResponseDTO("move to trash",200);
+        Optional<List> notesList = noteRepository.findByUserId(id);
+        if(notesList.isPresent()){
+            Optional<NoteModel> note = noteRepository.findById(noteId);
+            if(note.isPresent()){
+                note.get().setTrash(true);
+                noteRepository.save(note.get());
+                return new ResponseDTO("move to trash",200);
+            }
         }
         return new ResponseDTO("Note not found",404);
     }

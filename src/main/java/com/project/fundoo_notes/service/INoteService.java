@@ -13,7 +13,7 @@ public interface INoteService {
 
     ResponseDTO updateNote(String token, NoteDTO noteDTO, long noteId);
 
-    ResponseDTO deleteNote(String token);
+    ResponseDTO deleteNote(String token, long noteId);
 
     ResponseDTO archieveNote(String token);
 
