@@ -23,7 +23,7 @@ public interface INoteService {
 
     NoteResponseDTO getAllPinNote(String token);
 
-    NoteResponseDTO getAllNoteByArchieve(String token);
+    NoteResponseDTO getAllNoteFromArchieve(String token);
 
-    NoteResponseDTO getAllNoteByTrashAndArchieve(String token);
+    NoteResponseDTO getAllNoteFromTrashAndArchieve(String token);
 }

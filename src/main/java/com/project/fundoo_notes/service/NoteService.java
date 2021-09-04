@@ -135,7 +135,7 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public NoteResponseDTO getAllNoteByArchieve(String token) {
+    public NoteResponseDTO getAllNoteFromArchieve(String token) {
         Long id = tokenUtil.decodeToken(token);
         Optional<List>  notes = noteRepository.findByUserId(id);
         List getAllArchieveNote = null;
@@ -148,7 +148,7 @@ public class NoteService implements INoteService {
     }
 
     @Override
-    public NoteResponseDTO getAllNoteByTrashAndArchieve(String token) {
+    public NoteResponseDTO getAllNoteFromTrashAndArchieve(String token) {
         Long id = tokenUtil.decodeToken(token);
         Optional<List>  notes = noteRepository.findByUserId(id);
         List getAllTrashArchiveNote = null;
