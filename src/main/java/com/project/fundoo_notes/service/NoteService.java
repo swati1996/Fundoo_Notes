@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,15 +114,14 @@ public class NoteService implements INoteService {
     @Override
     public NoteResponseDTO getAllNoteFromTrash(String token) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<List>  notes = noteRepository.findByUserId(id);
+        Optional<List> notes = noteRepository.findByUserId(id);
         List getAllTrashNote=null;
         if (notes.isPresent()){
             getAllTrashNote = noteRepository.findAll().stream().
-                    filter(trash->trash.isTrash()==true).collect(Collectors.toList());
+                    filter(var-> var.getUserId()==id && var.isTrash()==true ).collect(Collectors.toList());
             return new NoteResponseDTO(getAllTrashNote,200);
         }
        return new NoteResponseDTO(getAllTrashNote,400);
-
     }
 
     @Override
@@ -133,7 +131,7 @@ public class NoteService implements INoteService {
         List getAllPinedNote = null;
         if (notes.isPresent()){
             getAllPinedNote = noteRepository.findAll().stream().
-                    filter(pin->pin.isPin()==true).collect(Collectors.toList());
+                    filter(var->var.getUserId()==id && var.isPin()==true ).collect(Collectors.toList());
             return new  NoteResponseDTO(getAllPinedNote,200);
         }
         return new NoteResponseDTO(getAllPinedNote,400);
@@ -146,19 +144,22 @@ public class NoteService implements INoteService {
         List getAllArchieveNote = null;
         if (notes.isPresent()) {
             getAllArchieveNote = noteRepository.findAll().stream().
-                    filter(arc -> arc.isArchieve() == true).collect(Collectors.toList());
+                    filter(var -> var.getUserId()==id && var.isArchieve() == true ).collect(Collectors.toList());
             return new NoteResponseDTO(getAllArchieveNote,200);
         }
         return new NoteResponseDTO(getAllArchieveNote,400);
     }
 
     @Override
-    public List getAllNoteByTrashAndArchieve() {
-        Predicate<NoteModel> isTrash = t -> t.isTrash() == true;
-        Predicate<NoteModel> isArchive = a -> a.isArchieve() == true;
-        List getAllTrashArchiveNote = noteRepository.findAll().stream().
-                filter(isTrash.and(isArchive)).collect(Collectors.toList());
-        System.out.println(getAllTrashArchiveNote);
-        return getAllTrashArchiveNote;
+    public NoteResponseDTO getAllNoteByTrashAndArchieve(String token) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<List>  notes = noteRepository.findByUserId(id);
+        List getAllTrashArchiveNote = null;
+        if (notes.isPresent()) {
+            getAllTrashArchiveNote = noteRepository.findAll().stream().
+                    filter(var -> var.getUserId() == id && var.isArchieve() == true &&  var.isTrash() == true ).collect(Collectors.toList());
+            return new  NoteResponseDTO(getAllTrashArchiveNote,200);
+        }
+        return new NoteResponseDTO(getAllTrashArchiveNote,200);
     }
 }

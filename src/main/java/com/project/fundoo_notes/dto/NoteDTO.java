@@ -20,14 +20,10 @@ public class NoteDTO {
     @NotBlank(message = "Please enter description")
     private String description;
     private String color;
-//    @JsonIgnore
-//    @NotBlank(message = "Please enter valid email")
-//    @Email
-//    private String emailid;
     @JsonIgnore
     private long userId;
-    private boolean inPin=false;
-    private boolean inarchieved=false;
+    private boolean pin = false;
+    private boolean isArchieve = false;
     @JsonIgnore
     private LocalDateTime updateDate=LocalDateTime.now();
     @JsonIgnore

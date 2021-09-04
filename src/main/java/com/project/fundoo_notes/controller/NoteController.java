@@ -84,8 +84,8 @@ public class NoteController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
     @GetMapping(value = "/getByTrashAndArchive/")
-    public ResponseEntity<List> getAllNoteByTrashAndArchive(){
-        List res = service.getAllNoteByTrashAndArchieve();
+    public ResponseEntity<NoteResponseDTO> getAllNoteByTrashAndArchive(@RequestHeader String token){
+        NoteResponseDTO res = service.getAllNoteByTrashAndArchieve(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 }
