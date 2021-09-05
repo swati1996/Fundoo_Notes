@@ -88,4 +88,11 @@ public class NoteController {
         NoteResponseDTO res = noteService.getAllNoteFromTrashAndArchieve(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    @PutMapping(value = "/setNoteColor/{noteId}")
+    public ResponseEntity<ResponseDTO> setNoteColor(@RequestHeader String token,
+                                                        @PathVariable Long noteId,
+                                                        @RequestBody String color){
+        ResponseDTO res = noteService.setNoteColor(token,noteId, color);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 }

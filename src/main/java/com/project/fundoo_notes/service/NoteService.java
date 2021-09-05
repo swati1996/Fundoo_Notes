@@ -159,4 +159,19 @@ public class NoteService implements INoteService {
         }
         return new NoteResponseDTO(getAllTrashArchiveNote,200);
     }
+
+    @Override
+    public ResponseDTO setNoteColor(String token, Long noteId, String color) {
+        Long id = tokenUtil.decodeToken(token);
+        Optional<List>  user = noteRepository.findByUserId(id);
+        if(user.isPresent()){
+            Optional<NoteModel> note = noteRepository.findById(noteId);
+            if(note.isPresent() && note.get().getUserId()==id){
+                note.get().setColor(color);
+                noteRepository.save(note.get());
+                return new ResponseDTO("Note color change",200);
+            }
+        }
+        return new ResponseDTO("Please check user or note id",400);
+    }
 }

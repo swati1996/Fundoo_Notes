@@ -26,4 +26,6 @@ public interface INoteService {
     NoteResponseDTO getAllNoteFromArchieve(String token);
 
     NoteResponseDTO getAllNoteFromTrashAndArchieve(String token);
+
+    ResponseDTO setNoteColor(String s, Long noteId, String token);
 }
