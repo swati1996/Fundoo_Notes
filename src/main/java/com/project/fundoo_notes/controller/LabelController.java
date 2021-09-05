@@ -42,11 +42,10 @@ public class LabelController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @PostMapping(value = "createlabelasnote")
+    @PostMapping(value = "createlabelasnote/{labelId}")
     public ResponseEntity<LabelResponseDTO> labelAsNote(@RequestHeader String token,
-                                                        @RequestParam long noteId,
-                                                        @RequestParam long labelId) {
-        LabelResponseDTO res = labelService.labelAsNote(token, noteId, labelId);
+                                                        @PathVariable long labelId) {
+        LabelResponseDTO res = labelService.labelAsNote(token, labelId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 

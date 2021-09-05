@@ -89,17 +89,19 @@ public class LabelService implements ILabelService {
     }
 
     @Override
-    public LabelResponseDTO labelAsNote(String token, long noteId, long labelId) {
+    public LabelResponseDTO labelAsNote(String token, long labelId) {
         long id = tokenUtil.decodeToken(token);
-//        Optional<List> note = noteRepository.findByUserId(id);
         Optional<LabelModel> label = labelRepository.findById(labelId);
-        NoteModel noteModel = new NoteModel();
-        noteModel.setUserId(id);
-        noteModel.setTitle(label.get().getLabelname());
-        noteModel.setUpdateDate(LocalDateTime.now());
-        noteModel.setRegisterDate(LocalDateTime.now());
-        noteRepository.save(noteModel);
-        return new LabelResponseDTO("Label as note",200);
+        if (label.isPresent()) {
+            NoteModel noteModel = new NoteModel();
+            noteModel.setUserId(id);
+            noteModel.setTitle(label.get().getLabelname());
+            noteModel.setUpdateDate(LocalDateTime.now());
+            noteModel.setRegisterDate(LocalDateTime.now());
+            noteRepository.save(noteModel);
+            return new LabelResponseDTO("Label as note", 200);
+        }
+        return new LabelResponseDTO("Label not present", 400);
     }
 
 //    @Override
