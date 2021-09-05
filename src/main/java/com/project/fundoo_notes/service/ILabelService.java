@@ -14,6 +14,6 @@ public interface ILabelService {
     LabelListResponse getLabel(String token);
 
     LabelResponseDTO labelAsNote(String token, long labelId);
-//
-//    LabelResponseDTO DeleteLabelAsNote(String token, long noteId, long labelId);
+
+    LabelResponseDTO DeleteLabelAsNote(String token, long labelId);
 }

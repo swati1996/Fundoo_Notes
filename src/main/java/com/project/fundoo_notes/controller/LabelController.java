@@ -49,11 +49,10 @@ public class LabelController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-//    @DeleteMapping(value = "deletelabelasnote")
-//    public ResponseEntity<LabelResponseDTO> deleteLabelAsNote(@RequestHeader String token,
-//                                                        @RequestParam long noteId,
-//                                                        @RequestParam long labelId) {
-//        LabelResponseDTO res = service.DeleteLabelAsNote(token, noteId, labelId);
-//        return new ResponseEntity<>(res,HttpStatus.OK);
-//    }
+    @DeleteMapping(value = "deletelabelasnote/{noteId}")
+    public ResponseEntity<LabelResponseDTO> deleteLabelAsNote(@RequestHeader String token,
+                                                        @PathVariable long noteId) {
+        LabelResponseDTO res = labelService.DeleteLabelAsNote(token, noteId);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
 }

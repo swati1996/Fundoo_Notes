@@ -104,14 +104,17 @@ public class LabelService implements ILabelService {
         return new LabelResponseDTO("Label not present", 400);
     }
 
-//    @Override
-//    public LabelResponseDTO DeleteLabelAsNote(String token, long noteId, long labelId) {
-//        long id = tokenUtil.decodeToken(token);
-//        Optional<NoteModel> note = noteRepository.findByIdAndUserId(noteId,id);
-//        Optional<LabelModel> label = labelRepository.findById(labelId);
-//        noteRepository.delete(note.get());
-//        return new LabelResponseDTO("Delete label",200);
-//    }
-//
-
+    @Override
+    public LabelResponseDTO DeleteLabelAsNote(String token, long noteId) {
+        long id = tokenUtil.decodeToken(token);
+        Optional<List> user = noteRepository.findByUserId(id);
+        if (user.isPresent()){
+            Optional<NoteModel> noteModel = noteRepository.findById(noteId);
+            if (noteModel.isPresent()) {
+                noteRepository.delete(noteModel.get());
+                return new LabelResponseDTO("Delete label as note",200);
+            }
+        }
+        return new LabelResponseDTO("Note is not present",400);
+    }
 }
