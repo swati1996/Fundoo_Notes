@@ -13,7 +13,7 @@ import java.util.Optional;
 @EnableJpaRepositories
 public interface NoteRepository extends JpaRepository<NoteModel,Long> {
     Optional<NoteModel> findById(long id);
-    Optional<NoteModel> findByIdAndUserId(Long labelId, Long userId);
+    Optional<List> findByIdAndUserId(Long labelId, Long userId);
     Optional<List> findByUserId(Long userId);
 
 }

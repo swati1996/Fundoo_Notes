@@ -12,7 +12,4 @@ import java.util.Optional;
 @EnableJpaRepositories
 public interface LabelRepository extends JpaRepository <LabelModel, Long>{
 
-
-
-
 }
