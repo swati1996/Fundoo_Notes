@@ -1,6 +1,7 @@
 package com.project.fundoo_notes.service;
 
 import com.project.fundoo_notes.dto.LabelDTO;
+import com.project.fundoo_notes.dto.LabelListResponse;
 import com.project.fundoo_notes.dto.LabelResponseDTO;
 
 public interface ILabelService {
@@ -8,10 +9,9 @@ public interface ILabelService {
 
     LabelResponseDTO update(String token, LabelDTO labelDTO, Long labelId);
 
+    LabelResponseDTO delete(String token, Long labelId);
 //
-//    LabelResponseDTO delete(String token);
-//
-//    LabelResponseDTO getLabel(String token);
+    LabelListResponse getLabel(String token);
 //
 //    LabelResponseDTO labelAsNote(String token, long noteId, long labelId);
 //

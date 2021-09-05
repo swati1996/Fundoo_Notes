@@ -2,6 +2,7 @@ package com.project.fundoo_notes.service;
 
 import com.project.fundoo_notes.builder.TokenUtil;
 import com.project.fundoo_notes.dto.LabelDTO;
+import com.project.fundoo_notes.dto.LabelListResponse;
 import com.project.fundoo_notes.dto.LabelResponseDTO;
 import com.project.fundoo_notes.model.LabelModel;
 import com.project.fundoo_notes.model.NoteModel;
@@ -59,28 +60,33 @@ public class LabelService implements ILabelService {
         }
             return new LabelResponseDTO("Label not found",400);
     }
+
+    @Override
+    public LabelResponseDTO delete(String token,Long labelId) {
+        long id = tokenUtil.decodeToken(token);
+        Optional<List> user= labelRepository.findByUserId(id);
+        if(user.isPresent()){
+            Optional<LabelModel> label = labelRepository.findById(labelId);
+            if(label.isPresent()) {
+                labelRepository.delete(label.get());
+                return new LabelResponseDTO("Label deleted",200);
+            }
+        }
+        return new LabelResponseDTO("Label not found",400);
+    }
 //
-//    @Override
-//    public LabelResponseDTO delete(String token) {
-//        long id = tokenUtil.decodeToken(token);
-//        Optional<LabelModel> labelModel = labelRepository.findById(id);
-//        if(labelModel.isPresent()){
-//            labelRepository.delete(labelModel.get());
-//            return new LabelResponseDTO("Label deleted",200);
-//        }
-//        return new LabelResponseDTO("Label not found",400);
-//    }
-//
-//    @Override
-//    public LabelResponseDTO getLabel(String token) {
-//        long id = tokenUtil.decodeToken(token);
-//        Optional<LabelModel> labelModel = labelRepository.findById(id);
-//        if(labelModel.isPresent()){
-//            return new LabelResponseDTO("Label present",200);
-//        }
-//        return new LabelResponseDTO("Label not present",400);
-//
-//    }
+    @Override
+    public LabelListResponse getLabel(String token) {
+        long id = tokenUtil.decodeToken(token);
+        Optional<List> user = labelRepository.findByUserId(id);
+        List labelList=null;
+        if(user.isPresent()){
+            labelList = user.get();
+            return new LabelListResponse( labelList,200);
+        }
+        return new LabelListResponse(labelList,400);
+
+    }
 //
 //    @Override
 //    public LabelResponseDTO labelAsNote(String token, long noteId, long labelId) {
