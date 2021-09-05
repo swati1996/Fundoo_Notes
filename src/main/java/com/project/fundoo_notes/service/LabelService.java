@@ -48,19 +48,11 @@ public class LabelService implements ILabelService {
     @Override
     public LabelResponseDTO update(String token, LabelDTO labelDTO,Long labelId) {
         long id = tokenUtil.decodeToken(token);
-        System.out.println(id);
         Optional<List> user= labelRepository.findByUserId(id);
-        System.out.println(user);
         if(user.isPresent()){
             Optional<LabelModel> label = labelRepository.findById(labelId);
-            System.out.println(label);
             if(label.isPresent()){
-                System.out.println("***************");
                 label.get().setLabelname(labelDTO.getLabelname());
-//                LabelModel labelModel= modelMapper.map(label,LabelModel.class);
-//                System.out.println(labelModel);
-//                labelModel.setUpdatedDate(LocalDateTime.now());
-//                labelModel.setUserId(id);
                 labelRepository.save(label.get());
                 return new LabelResponseDTO("Label updated Successfully",200);
             }
