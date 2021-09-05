@@ -55,14 +55,14 @@ public class NoteController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/isarchive/{noteId}")
+    @GetMapping(value="/archiveNote/{noteId}")
     public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token,
                                                    @PathVariable long noteId){
         ResponseDTO res = noteService.archieveNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/ispin/{noteId}")
+    @GetMapping(value="/pinNote/{noteId}")
     public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token,
                                                @PathVariable long noteId){
         ResponseDTO res = noteService.pinNote(token,noteId);

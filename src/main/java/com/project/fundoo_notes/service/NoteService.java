@@ -86,26 +86,28 @@ public class NoteService implements INoteService {
         Optional<List> notes = noteRepository.findByUserId(id);
         if(notes.isPresent()){
             Optional<NoteModel> note = noteRepository.findById(noteId);
-            if(note.get().isArchieve()){
-                return new ResponseDTO("Note in archive",200);
-            }else
-                return new ResponseDTO("Note not in archive",200);
+            if(note.isPresent() && note.get().getUserId()==id) {
+                note.get().setArchieve(true);
+                noteRepository.save(note.get());
+                return new ResponseDTO("Note in archive", 200);
+            }
         }
-        return new ResponseDTO("Note not found",400);
+        return new ResponseDTO("Note or user not found",400);
     }
 
     @Override
     public ResponseDTO pinNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
-        Optional<List>  notes = noteRepository.findByUserId(id);
-        if(notes.isPresent()){
+        Optional<List>  user = noteRepository.findByUserId(id);
+        if(user.isPresent()){
             Optional<NoteModel> note = noteRepository.findById(noteId);
-            if(note.get().isPin()){
-                return new ResponseDTO("Note in pin",200);
-            }else
-                return new ResponseDTO("Note not pin",200);
+            if(note.isPresent() && note.get().getUserId() == id) {
+                note.get().setPin(true);
+                noteRepository.save(note.get());
+                return new ResponseDTO("Note is pined", 200);
+            }
         }
-        return new ResponseDTO("Note not found",400);
+        return new ResponseDTO("User or Note not found",400);
     }
 
     @Override
