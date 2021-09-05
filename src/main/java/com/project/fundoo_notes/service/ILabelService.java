@@ -13,7 +13,7 @@ public interface ILabelService {
 
     LabelListResponse getLabel(String token);
 
-    LabelResponseDTO labelAsNote(String token, long labelId);
+    LabelResponseDTO NoteAsLabel(String token, long labelId);
 
     LabelResponseDTO DeleteLabelAsNote(String token, long labelId);
 }

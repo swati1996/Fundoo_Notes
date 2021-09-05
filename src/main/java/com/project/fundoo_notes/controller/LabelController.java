@@ -14,14 +14,14 @@ public class LabelController {
     @Autowired
     private ILabelService labelService;
 
-    @PostMapping(value = "createlabel/{noteId}")
+    @PostMapping(value = "createLabel/{noteId}")
     public ResponseEntity<LabelResponseDTO> createLabel(@RequestBody LabelDTO labelDTO,
                                                         @RequestHeader String token,
                                                         @PathVariable Long noteId){
         LabelResponseDTO res = labelService.create(labelDTO,token,noteId);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
-    @PutMapping(value = "updatelabel/{labelId}")
+    @PutMapping(value = "updateLabel/{labelId}")
     public ResponseEntity<LabelResponseDTO> updateLabel(@RequestHeader String token,
                                                         @RequestBody LabelDTO labelDTO,
                                                         @PathVariable Long labelId){
@@ -29,7 +29,7 @@ public class LabelController {
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "deletelabel/{labelId}")
+    @DeleteMapping(value = "deleteLabel/{labelId}")
     public ResponseEntity<LabelResponseDTO> deleteLabel(@RequestHeader String token,
                                                         @PathVariable Long labelId){
         LabelResponseDTO res = labelService.delete(token,labelId);
@@ -42,17 +42,17 @@ public class LabelController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @PostMapping(value = "createlabelasnote/{labelId}")
-    public ResponseEntity<LabelResponseDTO> labelAsNote(@RequestHeader String token,
-                                                        @PathVariable long labelId) {
-        LabelResponseDTO res = labelService.labelAsNote(token, labelId);
+    @PostMapping(value = "createNoteAsLabel/{noteId}")
+    public ResponseEntity<LabelResponseDTO> NodeAsLabel(@RequestHeader String token,
+                                                        @PathVariable long noteId) {
+        LabelResponseDTO res = labelService.NoteAsLabel(token, noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "deletelabelasnote/{noteId}")
+    @DeleteMapping(value = "deleteLabelAsNote/{labelId}")
     public ResponseEntity<LabelResponseDTO> deleteLabelAsNote(@RequestHeader String token,
-                                                        @PathVariable long noteId) {
-        LabelResponseDTO res = labelService.DeleteLabelAsNote(token, noteId);
+                                                        @PathVariable long labelId) {
+        LabelResponseDTO res = labelService.DeleteLabelAsNote(token, labelId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 }

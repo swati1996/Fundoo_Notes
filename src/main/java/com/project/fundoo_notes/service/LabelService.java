@@ -89,32 +89,33 @@ public class LabelService implements ILabelService {
     }
 
     @Override
-    public LabelResponseDTO labelAsNote(String token, long labelId) {
+    public LabelResponseDTO NoteAsLabel(String token, long noteId) {
         long id = tokenUtil.decodeToken(token);
-        Optional<LabelModel> label = labelRepository.findById(labelId);
-        if (label.isPresent()) {
-            NoteModel noteModel = new NoteModel();
-            noteModel.setUserId(id);
-            noteModel.setTitle(label.get().getLabelname());
-            noteModel.setUpdateDate(LocalDateTime.now());
-            noteModel.setRegisterDate(LocalDateTime.now());
-            noteRepository.save(noteModel);
-            return new LabelResponseDTO("Label as note", 200);
+        Optional<NoteModel> note = noteRepository.findById(noteId);
+        if (note.isPresent() && note.get().getUserId()==id) {
+            LabelModel labelModel = new LabelModel();
+            labelModel.setLabelname(note.get().getTitle());
+            labelModel.setUpdatedDate(LocalDateTime.now());
+            labelModel.setRegistrationDate(LocalDateTime.now());
+            labelModel.setNoteId(noteId);
+            labelModel.setUserId(id);
+            labelRepository.save(labelModel);
+            return new LabelResponseDTO("Note as label created", 200);
         }
         return new LabelResponseDTO("Label not present", 400);
     }
 
     @Override
-    public LabelResponseDTO DeleteLabelAsNote(String token, long noteId) {
+    public LabelResponseDTO DeleteLabelAsNote(String token, long labelId) {
         long id = tokenUtil.decodeToken(token);
-        Optional<List> user = noteRepository.findByUserId(id);
+        Optional<List> user = labelRepository.findByUserId(id);
         if (user.isPresent()){
-            Optional<NoteModel> noteModel = noteRepository.findById(noteId);
-            if (noteModel.isPresent()) {
-                noteRepository.delete(noteModel.get());
+            Optional<LabelModel> label = labelRepository.findById(labelId);
+            if (label.isPresent() && label.get().getUserId()==id) {
+                labelRepository.delete(label.get());
                 return new LabelResponseDTO("Delete label as note",200);
             }
         }
-        return new LabelResponseDTO("Note is not present",400);
+        return new LabelResponseDTO("label is not present",400);
     }
 }
