@@ -11,21 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class LabelController {
     @Autowired
-    private ILabelService service;
+    private ILabelService labelService;
 
     @PostMapping(value = "createlabel/{noteId}")
     public ResponseEntity<LabelResponseDTO> createLabel(@RequestBody LabelDTO labelDTO,
                                                         @RequestHeader String token,
                                                         @PathVariable Long noteId){
-        LabelResponseDTO res = service.create(labelDTO,token,noteId);
+        LabelResponseDTO res = labelService.create(labelDTO,token,noteId);
         return new ResponseEntity(res, HttpStatus.CREATED);
     }
-//    @PutMapping(value = "updatelabel/")
-//    public ResponseEntity<LabelResponseDTO> updateLabel(@RequestHeader String token,
-//                                                   @RequestBody LabelDTO labelDTO){
-//        LabelResponseDTO res = service.update(token,labelDTO);
-//        return new ResponseEntity(res, HttpStatus.CREATED);
-//    }
+    @PutMapping(value = "updatelabel/{labelId}")
+    public ResponseEntity<LabelResponseDTO> updateLabel(@RequestHeader String token,
+                                                        @RequestBody LabelDTO labelDTO,
+                                                        @PathVariable Long labelId){
+        LabelResponseDTO res = labelService.update(token,labelDTO,labelId);
+        return new ResponseEntity(res, HttpStatus.CREATED);
+    }
+
 //    @DeleteMapping(value = "deletelabel")
 //    public ResponseEntity<LabelResponseDTO> deleteLabel(@RequestHeader String token){
 //        LabelResponseDTO res = service.delete(token);

@@ -6,7 +6,8 @@ import com.project.fundoo_notes.dto.LabelResponseDTO;
 public interface ILabelService {
     LabelResponseDTO create(LabelDTO labelDTO, String token, Long noteId);
 
-//    LabelResponseDTO update(String token, LabelDTO labelDTO);
+    LabelResponseDTO update(String token, LabelDTO labelDTO, Long labelId);
+
 //
 //    LabelResponseDTO delete(String token);
 //

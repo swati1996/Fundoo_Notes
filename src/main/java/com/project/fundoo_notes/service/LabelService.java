@@ -45,18 +45,28 @@ public class LabelService implements ILabelService {
         return new LabelResponseDTO("Please check note Id",400);
     }
 
-//    @Override
-//    public LabelResponseDTO update(String token, LabelDTO labelDTO) {
-//        long id = tokenUtil.decodeToken(token);
-//        Optional<LabelModel> labelModel= labelRepository.findById(id);
-//        if(labelModel.isPresent()){
-//            LabelModel updateLabel = modelMapper.map(labelDTO,LabelModel.class);
-//            labelRepository.save(updateLabel);
-//            return new LabelResponseDTO("Label updated Successfully",200);
-//
-//        }else
-//            return new LabelResponseDTO("Label not found",400);
-//    }
+    @Override
+    public LabelResponseDTO update(String token, LabelDTO labelDTO,Long labelId) {
+        long id = tokenUtil.decodeToken(token);
+        System.out.println(id);
+        Optional<List> user= labelRepository.findByUserId(id);
+        System.out.println(user);
+        if(user.isPresent()){
+            Optional<LabelModel> label = labelRepository.findById(labelId);
+            System.out.println(label);
+            if(label.isPresent()){
+                System.out.println("***************");
+                label.get().setLabelname(labelDTO.getLabelname());
+//                LabelModel labelModel= modelMapper.map(label,LabelModel.class);
+//                System.out.println(labelModel);
+//                labelModel.setUpdatedDate(LocalDateTime.now());
+//                labelModel.setUserId(id);
+                labelRepository.save(label.get());
+                return new LabelResponseDTO("Label updated Successfully",200);
+            }
+        }
+            return new LabelResponseDTO("Label not found",400);
+    }
 //
 //    @Override
 //    public LabelResponseDTO delete(String token) {
