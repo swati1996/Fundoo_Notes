@@ -10,10 +10,10 @@ public interface ILabelService {
     LabelResponseDTO update(String token, LabelDTO labelDTO, Long labelId);
 
     LabelResponseDTO delete(String token, Long labelId);
-//
+
     LabelListResponse getLabel(String token);
-//
-//    LabelResponseDTO labelAsNote(String token, long noteId, long labelId);
+
+    LabelResponseDTO labelAsNote(String token, long noteId, long labelId);
 //
 //    LabelResponseDTO DeleteLabelAsNote(String token, long noteId, long labelId);
 }

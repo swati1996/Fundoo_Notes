@@ -42,13 +42,14 @@ public class LabelController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-//    @PostMapping(value = "createlabelasnote")
-//    public ResponseEntity<LabelResponseDTO> labelAsNote(@RequestHeader String token,
-//                                                        @RequestParam long noteId,
-//                                                        @RequestParam long labelId) {
-//        LabelResponseDTO res = service.labelAsNote(token, noteId, labelId);
-//        return new ResponseEntity<>(res,HttpStatus.OK);
-//    }
+    @PostMapping(value = "createlabelasnote")
+    public ResponseEntity<LabelResponseDTO> labelAsNote(@RequestHeader String token,
+                                                        @RequestParam long noteId,
+                                                        @RequestParam long labelId) {
+        LabelResponseDTO res = labelService.labelAsNote(token, noteId, labelId);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
+
 //    @DeleteMapping(value = "deletelabelasnote")
 //    public ResponseEntity<LabelResponseDTO> deleteLabelAsNote(@RequestHeader String token,
 //                                                        @RequestParam long noteId,
