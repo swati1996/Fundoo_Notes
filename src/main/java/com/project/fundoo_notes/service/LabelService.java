@@ -32,7 +32,7 @@ public class LabelService implements ILabelService {
     public LabelResponseDTO create(LabelDTO labelDTO, String token, Long noteId) {
         long id = tokenUtil.decodeToken(token);
         System.out.println(id);
-        Optional<List> noteModel = noteRepository.findByIdAndUserId(noteId,id);
+        Optional<NoteModel> noteModel = noteRepository.findByIdAndUserId(noteId,id);
         System.out.println(noteModel.get());
         if(noteModel.isPresent()){
             LabelModel labelModel= new LabelModel();
@@ -89,20 +89,23 @@ public class LabelService implements ILabelService {
     }
 
     @Override
-    public LabelResponseDTO NoteAsLabel(String token, long noteId) {
+    public LabelResponseDTO NoteAsLabel(String token, long noteId, long labelId) {
         long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findById(noteId);
-        if (note.isPresent() && note.get().getUserId()==id) {
-            LabelModel labelModel = new LabelModel();
-            labelModel.setLabelname(note.get().getTitle());
-            labelModel.setUpdatedDate(LocalDateTime.now());
-            labelModel.setRegistrationDate(LocalDateTime.now());
-            labelModel.setNoteId(noteId);
-            labelModel.setUserId(id);
-            labelRepository.save(labelModel);
-            return new LabelResponseDTO("Note as label created", 200);
+        Optional<NoteModel> note = noteRepository.findByIdAndUserId(noteId,id);
+        if(note.get().getUserId() == id){
+            Optional<LabelModel> label = labelRepository.findByIdAndUserId(labelId,id);
+            if(label.get().getUserId()==id){
+                note.get().setUpdateDate(LocalDateTime.now());
+                note.get().getLabelList().add(label.get());
+                label.get().setNoteId(noteId);
+                label.get().setUpdatedDate(LocalDateTime.now());
+                label.get().getNotes().add(note.get());
+                labelRepository.save(label.get());
+                noteRepository.save(note.get());
+                return new LabelResponseDTO("Note as label created", 200);
+            }
         }
-        return new LabelResponseDTO("Label not present", 400);
+        return new LabelResponseDTO("Label or user not present", 400);
     }
 
     @Override
