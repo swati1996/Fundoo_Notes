@@ -31,16 +31,16 @@ public class LabelService implements ILabelService {
     @Override
     public LabelResponseDTO create(LabelDTO labelDTO, String token, Long noteId) {
         long id = tokenUtil.decodeToken(token);
-        System.out.println(id);
-        Optional<NoteModel> noteModel = noteRepository.findByIdAndUserId(noteId,id);
-        System.out.println(noteModel.get());
-        if(noteModel.isPresent()){
+        NoteModel noteModel = noteRepository.findByIdAndUserId(noteId,id);
+        if(noteModel.getUserId()==id){
             LabelModel labelModel= new LabelModel();
             labelModel.setUpdatedDate(LocalDateTime.now());
             labelModel.setNoteId(noteId);
             labelModel.setUserId(id);
             labelModel.setLabelname(labelDTO.getLabelname());
             labelRepository.save(labelModel);
+            noteModel.getLabelList().add(labelModel);
+            noteRepository.save(noteModel);
             return new LabelResponseDTO("Label Created",200);
         }
         return new LabelResponseDTO("Please check note Id",400);
@@ -74,7 +74,7 @@ public class LabelService implements ILabelService {
         }
         return new LabelResponseDTO("Label not found",400);
     }
-//
+
     @Override
     public LabelListResponse getLabel(String token) {
         long id = tokenUtil.decodeToken(token);
@@ -90,18 +90,22 @@ public class LabelService implements ILabelService {
 
     @Override
     public LabelResponseDTO NoteAsLabel(String token, long noteId, long labelId) {
+        System.out.println("test");
         long id = tokenUtil.decodeToken(token);
-        Optional<NoteModel> note = noteRepository.findByIdAndUserId(noteId,id);
-        if(note.get().getUserId() == id){
+        System.out.println(id);
+        NoteModel note = noteRepository.findByIdAndUserId(noteId, id);
+        System.out.println(note);
+        if(note.getUserId() == id){
             Optional<LabelModel> label = labelRepository.findByIdAndUserId(labelId,id);
             if(label.get().getUserId()==id){
-                note.get().setUpdateDate(LocalDateTime.now());
-                note.get().getLabelList().add(label.get());
+                note.setUpdateDate(LocalDateTime.now());
+                note.getLabelList().add(label.get());
+                System.out.println(note.getLabelList());
                 label.get().setNoteId(noteId);
                 label.get().setUpdatedDate(LocalDateTime.now());
-                label.get().getNotes().add(note.get());
+                label.get().getNotes().add(note);
                 labelRepository.save(label.get());
-                noteRepository.save(note.get());
+                noteRepository.save(note);
                 return new LabelResponseDTO("Note as label created", 200);
             }
         }

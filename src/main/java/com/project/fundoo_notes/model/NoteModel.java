@@ -1,9 +1,7 @@
 package com.project.fundoo_notes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +12,8 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Notes")
 public class NoteModel {
     @Id
@@ -47,5 +47,8 @@ public class NoteModel {
     @JsonIgnore()
     @ManyToMany(cascade = CascadeType.ALL)
     private List<LabelModel> labelList;
+    @JsonIgnore()
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<NoteModel> collList;
 
 }

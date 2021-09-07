@@ -1,6 +1,6 @@
 package com.project.fundoo_notes.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,6 +8,10 @@ import java.util.List;
 
 @Data
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Label")
 public class LabelModel {
     @Id
