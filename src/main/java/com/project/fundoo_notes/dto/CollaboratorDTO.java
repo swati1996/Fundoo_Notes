@@ -17,5 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CollaboratorDTO {
-    private List<String> collList;
+    private long noteId;
+    private String email;
 }

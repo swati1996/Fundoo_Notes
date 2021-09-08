@@ -1,9 +1,11 @@
 package com.project.fundoo_notes.model;
 
-import lombok.Data;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.List;
 /**
  * purpose : Model for collaborator
@@ -13,6 +15,10 @@ import java.util.List;
  **/
 @Data
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "collaborator")
 public class CollaboratorModel {
     @Id

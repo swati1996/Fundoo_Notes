@@ -18,8 +18,8 @@ import java.util.Optional;
  **/
 @Repository
 @EnableJpaRepositories
-public interface CollaboratorRepository  extends JpaRepository<CollaboratorModel,Long> {
+public interface CollaboratorRepository extends JpaRepository<CollaboratorModel,Long> {
 
-    Optional<CollaboratorModel> findByUserIdAndEmail(Long userId,String email);
-    List<CollaboratorModel> findByUserIdAndNoteId(Long userId, long noteId);
+    Optional<CollaboratorModel> findByEmailAndNoteId(String email,Long noteId);
+    List<CollaboratorModel> findByNoteId(long noteId);
 }

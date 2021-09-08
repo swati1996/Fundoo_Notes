@@ -15,9 +15,9 @@ import java.util.List;
 
 @Service
 public interface ICollaboratorService {
-    ResponseDTO addCollaboratorForNote(String token, Long noteId, String email);
+    ResponseDTO addCollaboratorForNote(CollaboratorDTO collaboratorDTO);
 
-    ResponseDTO removeCollaborator(String token, Long noteId, String email);
-
-    List getCollaborator(String token, Long noteId);
+    ResponseDTO removeCollaborator(Long noteId, String email);
+//
+    List getCollaborator(Long noteId);
 }

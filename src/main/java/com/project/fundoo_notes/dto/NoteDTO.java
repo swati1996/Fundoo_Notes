@@ -3,9 +3,12 @@ package com.project.fundoo_notes.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -20,8 +23,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class NoteDTO {
+@Component
+public class NoteDTO implements Serializable {
     @NotBlank(message = "Title should not be empty")
     private String title;
     @NotBlank(message = "Please enter description")
