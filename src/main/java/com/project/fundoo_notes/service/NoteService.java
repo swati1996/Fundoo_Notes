@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * purpose : Service for note
+ * @author : Swati
+ * @version : 1.0
+ * @since : 3-7-21
+ **/
 @Service
 public class NoteService implements INoteService {
     @Autowired
@@ -27,6 +33,13 @@ public class NoteService implements INoteService {
     @Autowired
     private TokenUtil tokenUtil;
 
+    /**
+     * purpose : create note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
+
     @Override
     public ResponseDTO create(NoteDTO noteDTO, String token) {
         Long id = tokenUtil.decodeToken(token);
@@ -35,6 +48,12 @@ public class NoteService implements INoteService {
         noteRepository.save(note);
         return new ResponseDTO("Note created successfully",200);
     }
+    /**
+     * purpose : Get all notes
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public NoteResponseDTO getNote(String token) {
@@ -45,6 +64,12 @@ public class NoteService implements INoteService {
         }else
             return new NoteResponseDTO(notesList, 200);
     }
+    /**
+     * purpose : update existing note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public ResponseDTO updateNote(String token, NoteDTO noteDTO, long noteId) {
@@ -65,6 +90,12 @@ public class NoteService implements INoteService {
             return new ResponseDTO("User not present", 400);
     }
 
+    /**
+     * purpose : delete note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
     @Override
     public ResponseDTO deleteNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
@@ -80,6 +111,12 @@ public class NoteService implements INoteService {
         return new ResponseDTO("Note not found",404);
     }
 
+    /**
+     * purpose : Ability to archieve notes
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
     @Override
     public ResponseDTO archieveNote(String token, long noteId) {
         Long id = tokenUtil.decodeToken(token);
@@ -94,6 +131,12 @@ public class NoteService implements INoteService {
         }
         return new ResponseDTO("Note or user not found",400);
     }
+    /**
+     * purpose : Ability to pin a note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public ResponseDTO pinNote(String token, long noteId) {
@@ -110,6 +153,12 @@ public class NoteService implements INoteService {
         return new ResponseDTO("User or Note not found",400);
     }
 
+    /**
+     * purpose :Ability to get all note from trash
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
     @Override
     public NoteResponseDTO getAllNoteFromTrash(String token) {
         Long id = tokenUtil.decodeToken(token);
@@ -123,6 +172,12 @@ public class NoteService implements INoteService {
        return new NoteResponseDTO(getAllTrashNote,400);
     }
 
+    /**
+     * purpose : Ability to get all pin note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
     @Override
     public NoteResponseDTO getAllPinNote(String token) {
         Long id = tokenUtil.decodeToken(token);
@@ -135,6 +190,12 @@ public class NoteService implements INoteService {
         }
         return new NoteResponseDTO(getAllPinedNote,400);
     }
+    /**
+     * purpose : Ability to get all note from Archieve
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public NoteResponseDTO getAllNoteFromArchieve(String token) {
@@ -148,6 +209,12 @@ public class NoteService implements INoteService {
         }
         return new NoteResponseDTO(getAllArchieveNote,400);
     }
+    /**
+     * purpose : Get all note from trash and archieve
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public NoteResponseDTO getAllNoteFromTrashAndArchieve(String token) {
@@ -161,6 +228,12 @@ public class NoteService implements INoteService {
         }
         return new NoteResponseDTO(getAllTrashArchiveNote,200);
     }
+    /**
+     * purpose : Ability to set color of note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 3-7-21
+     **/
 
     @Override
     public ResponseDTO setNoteColor(String token, Long noteId, String color) {

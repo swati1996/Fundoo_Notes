@@ -6,6 +6,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
+/**
+ * purpose : Model for Label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
+
 @Data
 @Entity
 @Getter

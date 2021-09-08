@@ -7,6 +7,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * purpose : Model for Note
+ * @author : Swati
+ * @version : 1.0
+ * @since : 3-7-21
+ **/
 
 @Entity
 @Data
@@ -48,7 +54,7 @@ public class NoteModel {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<LabelModel> labelList;
     @JsonIgnore()
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<NoteModel> collList;
 
 }

@@ -9,11 +9,23 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * purpose : To create and decode token
+ * @author : Swati
+ * @version : 1.0
+ * @since : 8-7-21
+ **/
+
 @Component
 public class TokenUtil {
     private static final long EXPIRE_DATE=30*60*100000;
     private static final String TOKEN_SECRET = "ZCEQIUBFKSJBFJH2020BQWE";
 
+    /**
+     * @param : id
+     * @return : token
+     */
     public  String createToken(Long id)   {
         try {
             //to set algorithm
@@ -34,8 +46,8 @@ public class TokenUtil {
         return null;
     }
     /**
-     * @param token
-     * @return
+     * @param :token
+     * @return : id
      */
     public Long decodeToken(String token)
     {

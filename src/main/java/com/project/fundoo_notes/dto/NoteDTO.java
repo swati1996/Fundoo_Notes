@@ -8,6 +8,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
+
+/**
+ * purpose : DTO for note
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
 @Data
 @Setter
 @Getter

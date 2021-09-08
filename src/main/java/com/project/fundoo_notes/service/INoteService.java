@@ -6,6 +6,13 @@ import com.project.fundoo_notes.dto.ResponseDTO;
 
 import java.util.List;
 
+
+/**
+ * purpose : interface for note
+ * @author : Swati
+ * @version : 1.0
+ * @since : 3-7-21
+ **/
 public interface INoteService {
     ResponseDTO create(NoteDTO noteDTO, String token);
 

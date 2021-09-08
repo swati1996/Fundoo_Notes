@@ -16,6 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * purpose : Service for label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
 @Service
 public class LabelService implements ILabelService {
     @Autowired
@@ -27,6 +34,12 @@ public class LabelService implements ILabelService {
     @Autowired
     private NoteRepository noteRepository;
 
+    /**
+     * purpose :create label for note
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
 
     @Override
     public LabelResponseDTO create(LabelDTO labelDTO, String token, Long noteId) {
@@ -45,6 +58,12 @@ public class LabelService implements ILabelService {
         }
         return new LabelResponseDTO("Please check note Id",400);
     }
+    /**
+     * purpose : update existing label
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
 
     @Override
     public LabelResponseDTO update(String token, LabelDTO labelDTO,Long labelId) {
@@ -61,6 +80,13 @@ public class LabelService implements ILabelService {
             return new LabelResponseDTO("Label not found",400);
     }
 
+    /**
+     * purpose : delete existing label
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
+
     @Override
     public LabelResponseDTO delete(String token,Long labelId) {
         long id = tokenUtil.decodeToken(token);
@@ -75,6 +101,13 @@ public class LabelService implements ILabelService {
         return new LabelResponseDTO("Label not found",400);
     }
 
+    /**
+     * purpose : get all label
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
+
     @Override
     public LabelListResponse getLabel(String token) {
         long id = tokenUtil.decodeToken(token);
@@ -87,6 +120,12 @@ public class LabelService implements ILabelService {
         return new LabelListResponse(labelList,400);
 
     }
+    /**
+     * purpose : Ability to create note as label
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
 
     @Override
     public LabelResponseDTO NoteAsLabel(String token, long noteId, long labelId) {
@@ -112,6 +151,12 @@ public class LabelService implements ILabelService {
         return new LabelResponseDTO("Label or user not present", 400);
     }
 
+    /**
+     * purpose : Ability to delete note as label
+     * @author : Swati
+     * @version : 1.0
+     * @since : 4-7-21
+     **/
     @Override
     public LabelResponseDTO DeleteLabelAsNote(String token, long labelId) {
         long id = tokenUtil.decodeToken(token);

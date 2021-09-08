@@ -5,6 +5,12 @@ import lombok.*;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
+/**
+ * purpose : DTO for Label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 5-7-21
+ **/
 
 @Data
 @Setter

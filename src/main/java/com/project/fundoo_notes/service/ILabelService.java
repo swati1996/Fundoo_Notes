@@ -4,6 +4,14 @@ import com.project.fundoo_notes.dto.LabelDTO;
 import com.project.fundoo_notes.dto.LabelListResponse;
 import com.project.fundoo_notes.dto.LabelResponseDTO;
 
+
+/**
+ * purpose : Interface for label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
+
 public interface ILabelService {
     LabelResponseDTO create(LabelDTO labelDTO, String token, Long noteId);
 

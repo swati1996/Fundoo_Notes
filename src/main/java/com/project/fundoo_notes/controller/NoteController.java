@@ -15,11 +15,21 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * purpose : Controller for Note
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
 @RestController
 public class NoteController {
 
     @Autowired
     private INoteService noteService;
+
+    /**
+     * purpose : Ability to  create Note
+     **/
 
     @PostMapping(value = "createnote")
     public ResponseEntity<ResponseDTO> createNote( @RequestBody @Valid NoteDTO noteDTO,
@@ -35,12 +45,22 @@ public class NoteController {
             return new ResponseEntity(res, HttpStatus.CREATED);
         }
     }
+    /**
+     * purpose : Ability to get all Note for user
+     **/
+
 
     @GetMapping(value="/get")
     public ResponseEntity<NoteResponseDTO> getNote(@RequestHeader String token){
         NoteResponseDTO res = noteService.getNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+
+    /**
+     * purpose : Ability to update Note
+
+     **/
+
     @PutMapping(value="/update/{noteId}")
     public ResponseEntity<ResponseDTO> updateNote(@RequestHeader String token,
                                                   @RequestBody NoteDTO noteDTO,
@@ -48,6 +68,10 @@ public class NoteController {
         ResponseDTO res = noteService.updateNote(token,noteDTO,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    /**
+     * purpose : Ability to delete Note
+     **/
+
     @DeleteMapping(value="/delete/{noteId}")
     public ResponseEntity<ResponseDTO> deleteNote(@RequestHeader String token,
                                                   @PathVariable long noteId){
@@ -55,12 +79,20 @@ public class NoteController {
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
 
-    @GetMapping(value="/archiveNote/{noteId}")
-    public ResponseEntity<ResponseDTO> archiveNote(@RequestHeader String token,
-                                                   @PathVariable long noteId){
+    /**
+     * purpose : Ability to archieve Note
+     **/
+
+    @GetMapping(value="/archieveNote/{noteId}")
+    public ResponseEntity<ResponseDTO> archieveNote(@RequestHeader String token,
+                                                    @PathVariable long noteId){
         ResponseDTO res = noteService.archieveNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    /**
+     * purpose : Ability to pinned a note
+
+     **/
 
     @GetMapping(value="/pinNote/{noteId}")
     public ResponseEntity<ResponseDTO> pinNote(@RequestHeader String token,
@@ -68,26 +100,53 @@ public class NoteController {
         ResponseDTO res = noteService.pinNote(token,noteId);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    /**
+     * purpose : Ability to get all notes from trash
+     **/
+
     @GetMapping(value = "/getNoteFromTrash/")
     public ResponseEntity<NoteResponseDTO> getAllNoteByTrash(@RequestHeader String token){
         NoteResponseDTO res = noteService.getAllNoteFromTrash(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+
+    /**
+     * purpose : Ability to get all note which is pinned
+
+     **/
+
     @GetMapping(value = "/getPinedNoted/")
     public ResponseEntity<NoteResponseDTO> getAllPinedNote(@RequestHeader String token){
         NoteResponseDTO res = noteService.getAllPinNote(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+
+    /**
+     * purpose : Ability to get note from archieve
+
+     **/
+
     @GetMapping(value = "/getFromArchive/")
     public ResponseEntity<NoteResponseDTO> getAllNoteFromArchive(@RequestHeader String token){
         NoteResponseDTO res = noteService.getAllNoteFromArchieve(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+
+    /**
+     * purpose : Ability to get all note from Trash and archieve
+
+     **/
+
     @GetMapping(value = "/getFromTrashAndArchive/")
     public ResponseEntity<NoteResponseDTO> getAllNoteFromTrashAndArchive(@RequestHeader String token){
         NoteResponseDTO res = noteService.getAllNoteFromTrashAndArchieve(token);
         return new ResponseEntity<>(res,HttpStatus.OK);
     }
+    /**
+     * purpose : Ability to set the color of note
+
+     **/
+
     @PutMapping(value = "/setNoteColor/{noteId}")
     public ResponseEntity<ResponseDTO> setNoteColor(@RequestHeader String token,
                                                         @PathVariable Long noteId,

@@ -9,6 +9,12 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
+/**
+ * purpose :Send mail to users email id
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
 @Component
 public class MailService
 {

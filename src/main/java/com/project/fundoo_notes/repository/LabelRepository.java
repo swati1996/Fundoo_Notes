@@ -10,6 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * purpose : Repository  for label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 4-7-21
+ **/
 @Repository
 @EnableJpaRepositories
 public interface LabelRepository extends JpaRepository <LabelModel, Long>{

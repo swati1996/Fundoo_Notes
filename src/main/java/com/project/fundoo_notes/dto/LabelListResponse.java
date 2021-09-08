@@ -4,6 +4,13 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * purpose : response DTO as list  for Label
+ * @author : Swati
+ * @version : 1.0
+ * @since : 7-7-21
+ **/
+
 @Data
 @Getter
 @Setter

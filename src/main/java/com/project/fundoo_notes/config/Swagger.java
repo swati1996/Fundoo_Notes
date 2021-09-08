@@ -11,6 +11,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 
+/**
+ * purpose : Configure swagger for REST Apis
+
+ **/
+
 @Configuration
 @EnableSwagger2
 public class Swagger  {
