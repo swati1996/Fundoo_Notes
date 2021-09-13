@@ -6,10 +6,10 @@ import com.project.fundoo_notes.dto.ResponseDTO;
 import com.project.fundoo_notes.service.INoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,7 +25,22 @@ import java.util.stream.Collectors;
 public class NoteController {
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
     private INoteService noteService;
+
+    private static String url ="http://localhost:8080/isUserPresent/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.Wle-Gvxhe0b_8BJFTucN6yf-aZZCvVCWU0-XHrWcXek";
+
+
+
+    @GetMapping(value = "/getUser")
+    public ResponseEntity<Boolean> getUser(){
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        ResponseEntity<Boolean> res = restTemplate.exchange(url, HttpMethod.GET, request, Boolean.class);
+        return res;
+    }
 
     /**
      * purpose : Ability to  create Note
