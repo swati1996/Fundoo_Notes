@@ -24,23 +24,21 @@ import java.util.stream.Collectors;
 @RestController
 public class NoteController {
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private INoteService noteService;
 
-    private static String url ="http://localhost:8080/isUserPresent/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxfQ.Wle-Gvxhe0b_8BJFTucN6yf-aZZCvVCWU0-XHrWcXek";
 
 
 
-    @GetMapping(value = "/getUser")
-    public ResponseEntity<Boolean> getUser(){
-        HttpHeaders headers = new HttpHeaders();
-        HttpEntity<String> request = new HttpEntity<>(headers);
-        ResponseEntity<Boolean> res = restTemplate.exchange(url, HttpMethod.GET, request, Boolean.class);
-        return res;
-    }
+
+//    @GetMapping(value = "/getUserPresent")
+//    public ResponseEntity<Boolean> getUser(){
+//        HttpHeaders headers = new HttpHeaders();
+//        HttpEntity<String> request = new HttpEntity<>(headers);
+//        ResponseEntity<Boolean> res = restTemplate.exchange(url, HttpMethod.GET, request, Boolean.class);
+//        return res;
+//    }
 
     /**
      * purpose : Ability to  create Note

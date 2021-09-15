@@ -9,6 +9,7 @@ import com.project.fundoo_notes.repository.NoteRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -33,6 +34,13 @@ public class NoteService implements INoteService {
     @Autowired
     private TokenUtil tokenUtil;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private static String url ="http://localhost:8080/isUserPresent/";
+    //http://client1/isUserPresent/
+
+
     /**
      * purpose : create note
      * @author : Swati
@@ -42,11 +50,16 @@ public class NoteService implements INoteService {
 
     @Override
     public ResponseDTO create(NoteDTO noteDTO, String token) {
-        Long id = tokenUtil.decodeToken(token);
-        noteDTO.setUserId(id);
-        NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
-        noteRepository.save(note);
-        return new ResponseDTO("Note created successfully",200);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent){
+            Long id = tokenUtil.decodeToken(token);
+            noteDTO.setUserId(id);
+            NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
+            noteRepository.save(note);
+            return new ResponseDTO("Note created successfully",200);
+        }else
+            return new ResponseDTO("User Not found",400);
+
     }
     /**
      * purpose : Get all notes
@@ -57,12 +70,17 @@ public class NoteService implements INoteService {
 
     @Override
     public NoteResponseDTO getNote(String token) {
-        Long id = tokenUtil.decodeToken(token);
-        List notesList  = Collections.singletonList(noteRepository.findByUserId(id));
-        if(notesList.isEmpty()){
-            return new NoteResponseDTO(notesList,404);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        List notesList=null;
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            notesList = Collections.singletonList(noteRepository.findByUserId(id));
+            if (notesList.isEmpty()) {
+                return new NoteResponseDTO(notesList, 404);
+            } else
+                return new NoteResponseDTO(notesList, 200);
         }else
-            return new NoteResponseDTO(notesList, 200);
+            return new NoteResponseDTO(notesList,400);
     }
     /**
      * purpose : update existing note
@@ -73,21 +91,25 @@ public class NoteService implements INoteService {
 
     @Override
     public ResponseDTO updateNote(String token, NoteDTO noteDTO, long noteId) {
-        long id = tokenUtil.decodeToken(token);
-        Optional<List> notesList = noteRepository.findByUserId(id);
-        if(notesList.isPresent()){
-            Optional<NoteModel> notes = noteRepository.findById(noteId);
-            if(notes.isPresent()) {
-                NoteModel note=modelMapper.map(noteDTO,NoteModel.class);
-                note.setUpdateDate(LocalDateTime.now());
-                note.setId(noteId);
-                note.setUserId(id);
-                noteRepository.save(note);
-                return new ResponseDTO("Note updated Successfully", 200);
-            }
-            return new ResponseDTO("Note is not present",404);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent) {
+            long id = tokenUtil.decodeToken(token);
+            Optional<List> notesList = noteRepository.findByUserId(id);
+            if (notesList.isPresent()) {
+                Optional<NoteModel> notes = noteRepository.findById(noteId);
+                if (notes.isPresent()) {
+                    NoteModel note = modelMapper.map(noteDTO, NoteModel.class);
+                    note.setUpdateDate(LocalDateTime.now());
+                    note.setId(noteId);
+                    note.setUserId(id);
+                    noteRepository.save(note);
+                    return new ResponseDTO("Note updated Successfully", 200);
+                }
+                return new ResponseDTO("Note is not present", 404);
+            } else
+                return new ResponseDTO("User not present", 400);
         }else
-            return new ResponseDTO("User not present", 400);
+            return new ResponseDTO("User Not found",400);
     }
 
     /**
@@ -98,17 +120,21 @@ public class NoteService implements INoteService {
      **/
     @Override
     public ResponseDTO deleteNote(String token, long noteId) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List> notesList = noteRepository.findByUserId(id);
-        if(notesList.isPresent()){
-            Optional<NoteModel> note = noteRepository.findById(noteId);
-            if(note.isPresent()){
-                note.get().setTrash(true);
-                noteRepository.save(note.get());
-                return new ResponseDTO("move to trash",200);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> notesList = noteRepository.findByUserId(id);
+            if (notesList.isPresent()) {
+                Optional<NoteModel> note = noteRepository.findById(noteId);
+                if (note.isPresent()) {
+                    note.get().setTrash(true);
+                    noteRepository.save(note.get());
+                    return new ResponseDTO("move to trash", 200);
+                }
             }
-        }
-        return new ResponseDTO("Note not found",404);
+            return new ResponseDTO("Note not found", 404);
+        }else
+            return new ResponseDTO("User Not found",400);
     }
 
     /**
@@ -119,6 +145,8 @@ public class NoteService implements INoteService {
      **/
     @Override
     public ResponseDTO archieveNote(String token, long noteId) {
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent){
         Long id = tokenUtil.decodeToken(token);
         Optional<List> notes = noteRepository.findByUserId(id);
         if(notes.isPresent()){
@@ -130,6 +158,8 @@ public class NoteService implements INoteService {
             }
         }
         return new ResponseDTO("Note or user not found",400);
+        }else
+            return new ResponseDTO("User Not found",400);
     }
     /**
      * purpose : Ability to pin a note
@@ -140,18 +170,23 @@ public class NoteService implements INoteService {
 
     @Override
     public ResponseDTO pinNote(String token, long noteId) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List>  user = noteRepository.findByUserId(id);
-        if(user.isPresent()){
-            Optional<NoteModel> note = noteRepository.findById(noteId);
-            if(note.isPresent() && note.get().getUserId() == id) {
-                note.get().setPin(true);
-                noteRepository.save(note.get());
-                return new ResponseDTO("Note is pined", 200);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> user = noteRepository.findByUserId(id);
+            if (user.isPresent()) {
+                Optional<NoteModel> note = noteRepository.findById(noteId);
+                if (note.isPresent() && note.get().getUserId() == id) {
+                    note.get().setPin(true);
+                    noteRepository.save(note.get());
+                    return new ResponseDTO("Note is pined", 200);
+                }
             }
-        }
-        return new ResponseDTO("User or Note not found",400);
+        }else
+            return new ResponseDTO("User Not found",400);
+        return new ResponseDTO("User Not found",400);
     }
+
 
     /**
      * purpose :Ability to get all note from trash
@@ -161,15 +196,20 @@ public class NoteService implements INoteService {
      **/
     @Override
     public NoteResponseDTO getAllNoteFromTrash(String token) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List> notes = noteRepository.findByUserId(id);
-        List getAllTrashNote=null;
-        if (notes.isPresent()){
-            getAllTrashNote = noteRepository.findAll().stream().
-                    filter(var-> var.getUserId()==id && var.isTrash()==true ).collect(Collectors.toList());
-            return new NoteResponseDTO(getAllTrashNote,200);
-        }
-       return new NoteResponseDTO(getAllTrashNote,400);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        List getAllTrashNote = null;
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> notes = noteRepository.findByUserId(id);
+
+            if (notes.isPresent()) {
+                getAllTrashNote = noteRepository.findAll().stream().
+                        filter(var -> var.getUserId() == id && var.isTrash() == true).collect(Collectors.toList());
+                return new NoteResponseDTO(getAllTrashNote, 200);
+            }
+            return new NoteResponseDTO(getAllTrashNote, 400);
+        }else
+            return new NoteResponseDTO(getAllTrashNote,400);
     }
 
     /**
@@ -180,15 +220,20 @@ public class NoteService implements INoteService {
      **/
     @Override
     public NoteResponseDTO getAllPinNote(String token) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List>  notes = noteRepository.findByUserId(id);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
         List getAllPinedNote = null;
-        if (notes.isPresent()){
-            getAllPinedNote = noteRepository.findAll().stream().
-                    filter(var->var.getUserId()==id && var.isPin()==true ).collect(Collectors.toList());
-            return new  NoteResponseDTO(getAllPinedNote,200);
-        }
-        return new NoteResponseDTO(getAllPinedNote,400);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> notes = noteRepository.findByUserId(id);
+
+            if (notes.isPresent()) {
+                getAllPinedNote = noteRepository.findAll().stream().
+                        filter(var -> var.getUserId() == id && var.isPin() == true).collect(Collectors.toList());
+                return new NoteResponseDTO(getAllPinedNote, 200);
+            }
+            return new NoteResponseDTO(getAllPinedNote, 400);
+        }else
+            return new NoteResponseDTO(getAllPinedNote,400);
     }
     /**
      * purpose : Ability to get all note from Archieve
@@ -199,15 +244,21 @@ public class NoteService implements INoteService {
 
     @Override
     public NoteResponseDTO getAllNoteFromArchieve(String token) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List>  notes = noteRepository.findByUserId(id);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
         List getAllArchieveNote = null;
-        if (notes.isPresent()) {
-            getAllArchieveNote = noteRepository.findAll().stream().
-                    filter(var -> var.getUserId()==id && var.isArchieve() == true ).collect(Collectors.toList());
-            return new NoteResponseDTO(getAllArchieveNote,200);
-        }
-        return new NoteResponseDTO(getAllArchieveNote,400);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> notes = noteRepository.findByUserId(id);
+
+            if (notes.isPresent()) {
+                getAllArchieveNote = noteRepository.findAll().stream().
+                        filter(var -> var.getUserId() == id && var.isArchieve() == true).collect(Collectors.toList());
+                return new NoteResponseDTO(getAllArchieveNote, 200);
+            }
+            return new NoteResponseDTO(getAllArchieveNote, 400);
+        }else
+            return new NoteResponseDTO(getAllArchieveNote,400);
+
     }
     /**
      * purpose : Get all note from trash and archieve
@@ -218,15 +269,21 @@ public class NoteService implements INoteService {
 
     @Override
     public NoteResponseDTO getAllNoteFromTrashAndArchieve(String token) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List>  notes = noteRepository.findByUserId(id);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
         List getAllTrashArchiveNote = null;
-        if (notes.isPresent()) {
-            getAllTrashArchiveNote = noteRepository.findAll().stream().
-                    filter(var -> var.getUserId() == id && var.isArchieve() == true &&  var.isTrash() == true ).collect(Collectors.toList());
-            return new  NoteResponseDTO(getAllTrashArchiveNote,200);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> notes = noteRepository.findByUserId(id);
+
+            if (notes.isPresent()) {
+                getAllTrashArchiveNote = noteRepository.findAll().stream().
+                        filter(var -> var.getUserId() == id && var.isArchieve() == true && var.isTrash() == true).collect(Collectors.toList());
+                return new NoteResponseDTO(getAllTrashArchiveNote, 200);
+            }
+            return new NoteResponseDTO(getAllTrashArchiveNote, 200);
         }
-        return new NoteResponseDTO(getAllTrashArchiveNote,200);
+        else
+            return new NoteResponseDTO(getAllTrashArchiveNote, 400);
     }
     /**
      * purpose : Ability to set color of note
@@ -237,16 +294,21 @@ public class NoteService implements INoteService {
 
     @Override
     public ResponseDTO setNoteColor(String token, Long noteId, String color) {
-        Long id = tokenUtil.decodeToken(token);
-        Optional<List>  user = noteRepository.findByUserId(id);
-        if(user.isPresent()){
-            Optional<NoteModel> note = noteRepository.findById(noteId);
-            if(note.isPresent() && note.get().getUserId()==id){
-                note.get().setColor(color);
-                noteRepository.save(note.get());
-                return new ResponseDTO("Note color change",200);
+        boolean isUserPresent = restTemplate.getForObject(url+token,Boolean.class);
+        if(isUserPresent) {
+            Long id = tokenUtil.decodeToken(token);
+            Optional<List> user = noteRepository.findByUserId(id);
+            if (user.isPresent()) {
+                Optional<NoteModel> note = noteRepository.findById(noteId);
+                if (note.isPresent() && note.get().getUserId() == id) {
+                    note.get().setColor(color);
+                    noteRepository.save(note.get());
+                    return new ResponseDTO("Note color change", 200);
+                }
             }
-        }
-        return new ResponseDTO("Please check user or note id",400);
+            return new ResponseDTO("Please check user or note id", 400);
+        }else
+            return new ResponseDTO("User Not found",400);
+
     }
 }
